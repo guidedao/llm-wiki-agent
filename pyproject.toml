@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "guidedao-local-kb-agent"
+version = "0.1.0"
+description = "Local knowledge-base agent capstone scaffold for the Guidedao AI agents course."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+]
+
+[project.scripts]
+kb-agent = "kb_agent.app.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kb_agent"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
