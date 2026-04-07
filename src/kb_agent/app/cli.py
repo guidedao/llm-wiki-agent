@@ -9,13 +9,14 @@ from kb_agent.adapters.llm import (
     compile_source_wiki_page,
     compile_wiki_overview,
 )
+from kb_agent.agent.planner import build_answer_plan, build_plan_step_context, persist_plan
 from kb_agent.app.settings import load_settings
 from kb_agent.retrieval.context_packet import (
     persist_context_packet,
     resolve_raw_documents_with_reasons,
     resolve_wiki_documents_with_reasons,
 )
-from kb_agent.retrieval.search import rank_documents, search_documents
+from kb_agent.retrieval.search import rank_documents
 from kb_agent.runtime.run_state import persist_run_record
 from kb_agent.runtime.tracing import append_trace
 from kb_agent.storage.fixtures import load_markdown_corpus, load_query_fixture
@@ -199,11 +200,32 @@ def main() -> int:
         },
     )
 
+    plan = build_answer_plan(
+        question=query_fixture["question"],
+        concept_documents=concept_hits,
+        source_documents=source_hits,
+    )
+    plan_path = persist_plan(
+        settings.artifacts_dir,
+        run_id=run_record["run_id"],
+        plan=plan,
+    )
+    append_trace(
+        artifacts_dir=settings.artifacts_dir,
+        run_id=run_record["run_id"],
+        event={
+            "event": "plan_created",
+            "plan_path": str(plan_path),
+            "step_ids": [step.step_id for step in plan.steps],
+        },
+    )
+
     raw_resolution_seed = source_hits or source_resolution_seed
     raw_resolutions = resolve_raw_documents_with_reasons(raw_resolution_seed, corpus)
     resolved_raw_documents = [item["document"] for item in raw_resolutions]
+    raw_query = plan.steps[-1].retrieval_query if plan.steps else query_fixture["question"]
     raw_ranked = rank_documents(
-        query_fixture["question"],
+        raw_query,
         resolved_raw_documents or corpus,
         limit=2,
     )
@@ -220,6 +242,28 @@ def main() -> int:
                     "matched_terms": item["matched_terms"],
                 }
                 for item in raw_ranked
+            ],
+        },
+    )
+
+    plan_step_context = build_plan_step_context(
+        plan,
+        concept_documents=concept_hits,
+        source_documents=source_hits,
+        raw_documents=retrieved,
+    )
+    append_trace(
+        artifacts_dir=settings.artifacts_dir,
+        run_id=run_record["run_id"],
+        event={
+            "event": "plan_context_selected",
+            "step_context_counts": [
+                {
+                    "step_id": item["step_id"],
+                    "wiki_count": len(item["selected_wiki_documents"]),
+                    "raw_count": len(item["selected_raw_documents"]),
+                }
+                for item in plan_step_context
             ],
         },
     )
@@ -244,6 +288,18 @@ def main() -> int:
                     "reason": "query terms matched concept page",
                 }
                 for item in concept_ranked
+            ],
+        },
+        {
+            "stage": "answer_plan",
+            "selected": [
+                {
+                    "step_id": step.step_id,
+                    "target_layer": step.target_layer,
+                    "candidate_ids": step.candidate_ids,
+                    "reason": "plan created before final raw selection",
+                }
+                for step in plan.steps
             ],
         },
         {
@@ -283,6 +339,8 @@ def main() -> int:
         settings.artifacts_dir,
         run_id=run_record["run_id"],
         question=query_fixture["question"],
+        plan=plan.as_dict(),
+        plan_step_context=plan_step_context,
         wiki_documents=([wiki_index] if wiki_index else []) + concept_hits + source_hits,
         raw_documents=retrieved,
         decision_ladder=decision_ladder,
@@ -320,6 +378,15 @@ def main() -> int:
         run_id=run_record["run_id"],
         event={
             "event": "answer_written",
+            "answer_path": str(answer_path),
+        },
+    )
+    append_trace(
+        artifacts_dir=settings.artifacts_dir,
+        run_id=run_record["run_id"],
+        event={
+            "event": "plan_completed",
+            "plan_path": str(plan_path),
             "answer_path": str(answer_path),
         },
     )

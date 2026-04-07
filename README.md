@@ -105,11 +105,13 @@ See:
 
 ## Current Scope
 
-The current scaffold implements a narrow `M0 + M1.5` path:
+The current scaffold implements a narrow `M0 + early M2` path:
 
 - load a small local markdown corpus;
 - compile one overview wiki page plus `sources/` and `concepts/` wiki pages into the vault;
 - answer one fixed query through the `index -> concepts -> sources -> raw notes` path;
+- create an inspectable answer plan before the final answer;
+- link plan steps to selected wiki and raw context;
 - write a context packet that shows which knowledge artifacts were selected;
 - write a markdown answer with citations;
 - keep `vault/index.md` and `vault/log.md` up to date;
@@ -127,8 +129,6 @@ For `M0`, students can already open `vault/` in Obsidian and inspect:
 
 Later milestones will add:
 
-- `M1`: wiki-aware querying over `index`, `concepts`, `sources`, and source notes;
-- `M2`: planning and retrieval under an inspectable answer plan;
 - `M3`: runtime state, health checks, and observability;
 - `Stretch A`: controlled write-back;
 - `Stretch B`: eval harness.

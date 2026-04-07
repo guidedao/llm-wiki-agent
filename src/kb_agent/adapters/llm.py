@@ -103,7 +103,7 @@ def build_grounded_answer(
     if wiki_documents:
         lines.extend(["", "## Через какие wiki-страницы был собран контекст", ""])
         for document in wiki_documents:
-            lines.append(f"- [[wiki/{document['source_id']}]]")
+            lines.append(f"- [[wiki/{document['note_id']}]]")
     lines.extend(["", "## Цитаты", ""])
     for document in documents:
         lines.append(f"- [[raw/{document['source_id']}]]")

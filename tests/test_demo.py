@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from kb_agent.adapters.llm import (
@@ -8,6 +9,7 @@ from kb_agent.adapters.llm import (
     compile_source_wiki_page,
     compile_wiki_overview,
 )
+from kb_agent.agent.planner import build_answer_plan, build_plan_step_context, persist_plan
 from kb_agent.retrieval.context_packet import (
     persist_context_packet,
     resolve_raw_documents_with_reasons,
@@ -124,6 +126,18 @@ def test_wiki_pages_drive_context_selection(tmp_path):
     source_hits = [item["document"] for item in source_resolutions]
     raw_resolutions = resolve_raw_documents_with_reasons(source_hits, corpus)
     resolved_raw = [item["document"] for item in raw_resolutions]
+    plan = build_answer_plan(
+        question="Что база знаний говорит про контекст-инжиниринг и trace grading?",
+        concept_documents=[item["document"] for item in concept_ranked],
+        source_documents=source_hits,
+    )
+    plan_path = persist_plan(tmp_path / "artifacts", run_id="run-1", plan=plan)
+    plan_step_context = build_plan_step_context(
+        plan,
+        concept_documents=[item["document"] for item in concept_ranked],
+        source_documents=source_hits,
+        raw_documents=resolved_raw,
+    )
     decision_ladder = [
         {
             "stage": "concept_selection",
@@ -141,18 +155,24 @@ def test_wiki_pages_drive_context_selection(tmp_path):
         tmp_path / "artifacts",
         run_id="run-1",
         question="Что база знаний говорит про контекст-инжиниринг и trace grading?",
+        plan=plan.as_dict(),
+        plan_step_context=plan_step_context,
         wiki_documents=concept_hits + source_hits,
         raw_documents=resolved_raw,
         decision_ladder=decision_ladder,
     )
 
     context_text = context_path.read_text(encoding="utf-8")
+    plan_payload = json.loads(plan_path.read_text(encoding="utf-8"))
     assert any(document["note_id"] == "index" for document in concept_hits)
     assert any(document["note_id"] == "concepts/context-engineering" for document in concept_hits)
     assert any(document["note_id"] == "sources/context-engineering" for document in source_hits)
     assert "context-engineering" in context_text
     assert "decision_ladder" in context_text
+    assert "plan_step_context" in context_text
     assert "matched_terms" in context_text
+    assert len(plan_payload["steps"]) >= 3
+    assert plan_payload["steps"][-1]["target_layer"] == "raw"
 
 
 def test_vault_home_and_log_are_written(tmp_path):

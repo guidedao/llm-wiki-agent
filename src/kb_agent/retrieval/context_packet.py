@@ -96,6 +96,8 @@ def persist_context_packet(
     *,
     run_id: str,
     question: str,
+    plan: dict,
+    plan_step_context: list[dict],
     wiki_documents: list[dict],
     raw_documents: list[dict],
     decision_ladder: list[dict],
@@ -105,6 +107,8 @@ def persist_context_packet(
     packet = {
         "run_id": run_id,
         "question": question,
+        "plan": plan,
+        "plan_step_context": plan_step_context,
         "wiki_documents": [
             {
                 "source_id": document["source_id"],

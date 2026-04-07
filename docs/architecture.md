@@ -20,9 +20,16 @@ Current `M1` slice:
 3. resolve source notes from wiki links;
 4. persist a context packet into `artifacts/context/`.
 
+Current `M2` slice:
+
+1. build a short answer plan before the final answer;
+2. persist `artifacts/plans/<run_id>.json`;
+3. link plan steps to selected wiki and raw context;
+4. write planning events into the JSONL trace.
+
 Later milestones will add:
 
 - wiki-aware tools;
-- planning and bounded maintenance actions;
+- richer planning and bounded maintenance actions;
 - runtime state, health checks, and retries;
 - controlled write-back and evals.
