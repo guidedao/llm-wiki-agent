@@ -1,4 +1,4 @@
-# guidedao-local-kb-agent
+# llm-wiki-agent
 
 Capstone repository scaffold for the course `Разработка AI-агентов`.
 
@@ -141,7 +141,7 @@ Important:
 ## Repo Shape
 
 ```text
-guidedao-local-kb-agent/
+llm-wiki-agent/
   README.md
   pyproject.toml
   .env.example
