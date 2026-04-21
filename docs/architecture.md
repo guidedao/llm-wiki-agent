@@ -27,9 +27,16 @@ Current `M2` slice:
 3. link plan steps to selected wiki and raw context;
 4. write planning events into the JSONL trace.
 
+Current `M3` slice:
+
+1. treat `artifacts/runs/<run_id>.json` as the run state record;
+2. mark successful completion with a terminal reason;
+3. write `artifacts/health/<run_id>.json` as a machine-readable health report;
+4. keep `run_budget.yaml` as the readable budget by runtime stage.
+
 Later milestones will add:
 
 - wiki-aware tools;
 - richer planning and bounded maintenance actions;
-- runtime state, health checks, and retries;
+- retries, pause/resume, and operator remediation;
 - controlled write-back and evals.

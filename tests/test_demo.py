@@ -10,11 +10,14 @@ from kb_agent.adapters.llm import (
     compile_wiki_overview,
 )
 from kb_agent.agent.planner import build_answer_plan, build_plan_step_context, persist_plan
+from kb_agent.health.checks import build_health_report, persist_health_report
 from kb_agent.retrieval.context_packet import (
     persist_context_packet,
     resolve_raw_documents_with_reasons,
     resolve_wiki_documents_with_reasons,
 )
+from kb_agent.runtime.run_state import persist_run_record
+from kb_agent.runtime.tracing import append_trace
 from kb_agent.retrieval.search import rank_documents, search_documents
 from kb_agent.storage.fixtures import load_markdown_corpus, load_query_fixture
 from kb_agent.storage.vault import append_run_log, ensure_vault_scaffold, write_vault_home
@@ -201,3 +204,51 @@ def test_vault_home_and_log_are_written(tmp_path):
     assert "[[outputs/run-1]]" in index_text
     assert "Что говорит база знаний" in log_text
     assert "[[raw/context-engineering]]" in log_text
+
+
+def test_health_report_checks_core_run_artifacts(tmp_path):
+    artifacts_dir = tmp_path / "artifacts"
+    run_id = "run-1"
+    persist_run_record(
+        artifacts_dir,
+        task_title="Проверить запуск",
+        stage="started",
+        run_id=run_id,
+    )
+    for event_name in [
+        "query_loaded",
+        "corpus_loaded",
+        "wiki_compiled",
+        "plan_created",
+        "plan_context_selected",
+        "context_packet_written",
+        "answer_written",
+        "plan_completed",
+    ]:
+        append_trace(artifacts_dir, run_id, {"event": event_name})
+    (artifacts_dir / "plans").mkdir(parents=True)
+    (artifacts_dir / "plans" / f"{run_id}.json").write_text(
+        json.dumps({"steps": []}) + "\n",
+        encoding="utf-8",
+    )
+    (artifacts_dir / "context").mkdir(parents=True)
+    (artifacts_dir / "context" / f"{run_id}.json").write_text(
+        json.dumps({"decision_ladder": []}) + "\n",
+        encoding="utf-8",
+    )
+    persist_run_record(
+        artifacts_dir,
+        task_title="Проверить запуск",
+        stage="completed",
+        run_id=run_id,
+        terminal_reason="success",
+        answer_path=tmp_path / "vault" / "outputs" / "run-1.md",
+        wiki_path=tmp_path / "vault" / "wiki" / "index.md",
+    )
+
+    report = build_health_report(artifacts_dir, run_id)
+    report_path = persist_health_report(artifacts_dir, report)
+
+    assert report["status"] == "pass"
+    assert report["summary"]["failed_count"] == 0
+    assert report_path.exists()

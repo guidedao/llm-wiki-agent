@@ -105,7 +105,7 @@ See:
 
 ## Current Scope
 
-The current scaffold implements a narrow `M0 + early M2` path:
+The current scaffold implements a narrow `M0 + M2 + early M3` path:
 
 - load a small local markdown corpus;
 - compile one overview wiki page plus `sources/` and `concepts/` wiki pages into the vault;
@@ -115,7 +115,8 @@ The current scaffold implements a narrow `M0 + early M2` path:
 - write a context packet that shows which knowledge artifacts were selected;
 - write a markdown answer with citations;
 - keep `vault/index.md` and `vault/log.md` up to date;
-- persist a simple run record and JSONL trace.
+- persist a run record, JSONL trace, and health report for the run;
+- keep a readable `run_budget.yaml` for the main runtime stages.
 
 For `M0`, students can already open `vault/` in Obsidian and inspect:
 
@@ -129,7 +130,7 @@ For `M0`, students can already open `vault/` in Obsidian and inspect:
 
 Later milestones will add:
 
-- `M3`: runtime state, health checks, and observability;
+- `M3`: richer runtime state, operator remediation, and recovery exercises;
 - `Stretch A`: controlled write-back;
 - `Stretch B`: eval harness.
 
@@ -190,6 +191,8 @@ The demo writes student-visible knowledge artifacts into `vault/`:
 It also writes runtime artifacts to `artifacts/`:
 
 - `context/<run_id>.json`
+- `health/<run_id>.json`
+- `plans/<run_id>.json`
 - `runs/<run_id>.json`
 - `traces/<run_id>.jsonl`
 
