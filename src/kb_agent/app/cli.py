@@ -11,6 +11,7 @@ from kb_agent.adapters.llm import (
 )
 from kb_agent.agent.planner import build_answer_plan, build_plan_step_context, persist_plan
 from kb_agent.app.settings import load_settings
+from kb_agent.health.checks import build_health_report, persist_health_report
 from kb_agent.retrieval.context_packet import (
     persist_context_packet,
     resolve_raw_documents_with_reasons,
@@ -404,8 +405,20 @@ def main() -> int:
         task_title=query_fixture["question"],
         run_id=run_record["run_id"],
         stage="completed",
+        terminal_reason="success",
         answer_path=answer_path,
         wiki_path=wiki_path,
+    )
+    health_report = build_health_report(settings.artifacts_dir, run_record["run_id"])
+    health_path = persist_health_report(settings.artifacts_dir, health_report)
+    append_trace(
+        artifacts_dir=settings.artifacts_dir,
+        run_id=run_record["run_id"],
+        event={
+            "event": "health_report_written",
+            "health_path": str(health_path),
+            "health_status": health_report["status"],
+        },
     )
 
     print(f"run_id: {run_record['run_id']}")
@@ -416,6 +429,7 @@ def main() -> int:
     print(f"answer: {answer_path}")
     print(f"context: {context_packet_path}")
     print(f"trace: {settings.artifacts_dir / 'traces' / (run_record['run_id'] + '.jsonl')}")
+    print(f"health: {health_path}")
     return 0
 
 
