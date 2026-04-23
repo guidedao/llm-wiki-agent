@@ -1,144 +1,138 @@
 # llm-wiki-agent
 
-Capstone repository scaffold for the course `Разработка AI-агентов`.
+Учебный capstone-репозиторий для курса «Разработка AI-агентов».
 
-This project is a local knowledge-base agent inspired by the `Second Brain`
-idea, but scoped as a concrete engineering capstone instead of a vague personal
-knowledge platform.
+Это локальный агент базы знаний: он берёт небольшой markdown-корпус, собирает
+из него wiki-слой, отвечает на вопрос с опорой на источники и оставляет
+проверяемые артефакты запуска. Проект устроен как инженерная выпускная работа,
+а не как абстрактная платформа для личных заметок.
 
-The framing is inspired by Andrej Karpathy's April 2026 `LLM Knowledge Bases`
-X post and companion gist:
+Идея вдохновлена постом Андрея Карпати про «LLM Knowledge Bases» и
+сопроводительным gist:
 
-- X post:
+- пост в X:
   [Andrej Karpathy on X](https://x.com/karpathy/status/2040470801506541998)
-- idea gist:
+- gist с идеей:
   [LLM Knowledge Bases gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
 
-In practice, the idea is:
+Мы используем эту идею как ориентир, а не как спецификацию и не как обещание
+воспроизвести чужой workflow один в один. Внутри курса важнее другое:
+локальный корпус, проверяемый wiki-слой, grounded answer, состояние запуска,
+трейсы и понятный человеческий интерфейс через Obsidian.
 
-- a local `raw/` corpus;
-- an automatically compiled `wiki/` layer that later gains a live LLM path;
-- question answering over the knowledge base, with later bounded maintenance;
-- a human-readable frontend like Obsidian.
+## Форма проекта
 
-We use this as an inspiration pattern, not as a spec or a promise to recreate
-Karpathy's exact workflow.
+Проект лучше всего понимать как несколько слоёв:
 
-## Product Shape
+- локальный корпус исходных документов в `vault/raw/`;
+- скомпилированный wiki-слой поверх этого корпуса;
+- агент, который отвечает на вопросы по wiki и исходным файлам;
+- runtime, который пишет состояние запуска, трейсы и markdown-выводы;
+- Obsidian как удобный frontend для просмотра vault.
 
-The project is best understood as:
+«Second Brain» здесь остаётся метафорой. Репозиторий не пытается стать
+универсальной системой личных заметок.
 
-- a local corpus of source documents;
-- a compiled wiki layer built from that corpus;
-- an agent that answers grounded questions against the wiki and source files;
-- a runtime that writes traces, run state, and markdown outputs;
-- Obsidian as the human-facing frontend for browsing the vault.
+## Зачем это в курсе
 
-We keep `Second Brain` as a metaphor, not as the exact repo or package name.
+Этот capstone естественно связывает темы курса:
 
-## Why This Capstone
-
-It naturally connects:
-
-- LLM calls;
-- local ingestion;
+- вызовы LLM;
+- локальную загрузку документов;
 - retrieval;
-- context assembly;
-- markdown outputs;
-- run state and traces;
-- later health checks and controlled write-back.
+- сборку контекста;
+- markdown-выводы;
+- состояние запуска и трейсы;
+- будущие health checks и controlled write-back.
 
-## Delivery Model
+## Модель доставки
 
-This capstone should remain self-sustaining for the student.
+Проект должен оставаться самостоятельным для студента. Базовый путь должен
+работать через:
 
-That means the core path should work through:
+- брифы в LMS;
+- точные git-метки и коммиты;
+- локальные команды `just demo` и `just test`;
+- проверяемые артефакты в `vault/` и `artifacts/`;
+- будущие solution-метки для сравнения.
 
-- LMS milestone briefings
-- exact repo tags and commits
-- local commands like `just demo` and `just test`
-- inspectable artifacts in `vault/` and `artifacts/`
-- later solution tags for comparison
+Сгенерированные локальные артефакты запуска намеренно не входят в tracked
+baseline репозитория. Студент создаёт их у себя через `just demo`.
 
-It should not depend on mentor intervention as part of the default path.
+## Политика зависимостей
 
-Local generated run artifacts are intentionally not part of the tracked repo
-baseline. Students should produce them locally through `just demo`.
+Основной учебный путь должен запускаться без платных поисковых или социальных
+API.
 
-## Dependency Policy
+Обязательный минимум:
 
-The core student path must stay runnable without extra paid search or social
-API subscriptions.
+- Python `3.11`;
+- `uv`;
+- `just`;
+- локальные fixtures и детерминированный тестовый режим.
 
-Core required path:
+Стандартный live LLM path курса:
 
-- Python `3.11`
-- `uv`
-- `just`
-- local fixtures and deterministic test mode
+- `OPENAI_API_KEY`.
 
-Course-default live LLM path:
+Опциональные live-адаптеры:
 
-- `OPENAI_API_KEY`
+- `Brave Search API` для живого веб-поиска.
 
-Optional live adapters:
+Stretch-only адаптеры:
 
-- `Brave Search API` for live web search
+- `X API`.
 
-Stretch-only adapters:
+Это означает:
 
-- `X API`
+- ни один базовый milestone не должен требовать `Brave Search API`;
+- ни один базовый milestone не должен требовать `X API`;
+- репозиторий всегда должен поддерживать fixture-backed path;
+- ручной ввод URL остаётся допустимой альтернативой live search;
+- текущий `M0` scaffold ещё не требует `OPENAI_API_KEY`.
 
-This means:
+См. также:
 
-- no core milestone should require `Brave Search API`;
-- no core milestone should require `X API`;
-- the repository must always support a fixture-backed path;
-- manual URL input should remain a valid alternative to live search.
-- current `M0` scaffold does not require `OPENAI_API_KEY` yet.
+- [docs/dependency-policy.md](docs/dependency-policy.md)
+- [docs/milestones/TEMPLATE.md](docs/milestones/TEMPLATE.md)
+- [docs/milestones/m2.md](docs/milestones/m2.md)
 
-See:
+## Текущий объём
 
-- `docs/dependency-policy.md`
-- `docs/milestones/TEMPLATE.md`
-- `docs/milestones/m2.md`
+Сейчас scaffold реализует узкий путь `M0 + ранний M2`:
 
-## Current Scope
+- загружает небольшой локальный markdown-корпус;
+- собирает overview wiki page, `sources/` и `concepts/` страницы в vault;
+- отвечает на один фиксированный запрос через путь `index -> concepts -> sources -> raw notes`;
+- создаёт проверяемый план ответа до финального ответа;
+- связывает шаги плана с выбранным wiki- и raw-контекстом;
+- пишет context packet, где видно, какие knowledge artifacts были выбраны;
+- пишет markdown-ответ с цитированием источников;
+- обновляет `vault/index.md` и `vault/log.md`;
+- сохраняет простой run record и JSONL trace.
 
-The current scaffold implements a narrow `M0 + early M2` path:
+Уже на `M0` студент может открыть `vault/` в Obsidian и посмотреть:
 
-- load a small local markdown corpus;
-- compile one overview wiki page plus `sources/` and `concepts/` wiki pages into the vault;
-- answer one fixed query through the `index -> concepts -> sources -> raw notes` path;
-- create an inspectable answer plan before the final answer;
-- link plan steps to selected wiki and raw context;
-- write a context packet that shows which knowledge artifacts were selected;
-- write a markdown answer with citations;
-- keep `vault/index.md` and `vault/log.md` up to date;
-- persist a simple run record and JSONL trace.
+- `vault/index.md`;
+- `vault/log.md`;
+- `vault/raw/`;
+- `vault/wiki/index.md`;
+- `vault/wiki/sources/<source_id>.md`;
+- `vault/wiki/concepts/<concept_id>.md`;
+- `vault/outputs/`.
 
-For `M0`, students can already open `vault/` in Obsidian and inspect:
+Следующие milestone добавят:
 
-- `vault/index.md`
-- `vault/log.md`
-- `vault/raw/`
-- `vault/wiki/index.md`
-- `vault/wiki/sources/<source_id>.md`
-- `vault/wiki/concepts/<concept_id>.md`
-- `vault/outputs/`
-
-Later milestones will add:
-
-- `M3`: runtime state, health checks, and observability;
+- `M3`: состояние runtime, health checks и observability;
 - `Stretch A`: controlled write-back;
 - `Stretch B`: eval harness.
 
-Important:
+Важно:
 
-- placeholder modules already exist in `src/kb_agent/`;
-- they are future milestone surfaces, not active functionality in `M0`.
+- placeholder-модули уже лежат в `src/kb_agent/`;
+- это поверхности будущих milestone, а не вся активная функциональность `M0`.
 
-## Repo Shape
+## Структура репозитория
 
 ```text
 llm-wiki-agent/
@@ -157,53 +151,64 @@ llm-wiki-agent/
   .github/workflows/ci.yml
 ```
 
-## Commands
+## Команды
 
-- `just setup`
-- `just demo`
-- `just test`
+```bash
+just setup
+just demo
+just test
+```
+
+Что делают команды:
+
+- `just setup` устанавливает зависимости через `uv sync --frozen --extra dev`;
+- `just demo` запускает demo path на fixture-запросе;
+- `just test` запускает тесты проекта.
 
 ## Obsidian
 
-We recommend that students install the free Obsidian app and open the repo's
-local `vault/` folder as a vault.
+Мы рекомендуем студентам установить бесплатное приложение Obsidian и открыть
+локальную папку `vault/` как отдельный vault.
 
-Obsidian is the most convenient way to browse the knowledge artifacts in this
-capstone, but the core path remains markdown-first and editor-agnostic. Any
-editor or file browser still works.
+Obsidian удобен для просмотра knowledge artifacts, но основной путь остаётся
+markdown-first и не зависит от конкретного редактора. Обычный редактор или
+файловый браузер тоже подходят.
 
-Setup guide:
+Гайд по настройке:
 
 - [docs/obsidian-setup.md](docs/obsidian-setup.md)
 
-## Demo Output
+## Что создаёт demo
 
-The demo writes student-visible knowledge artifacts into `vault/`:
+Demo пишет student-visible knowledge artifacts в `vault/`:
 
-- `vault/index.md`
-- `vault/log.md`
-- `vault/wiki/index.md`
-- `vault/wiki/sources/<source_id>.md`
-- `vault/wiki/concepts/<concept_id>.md`
-- `vault/outputs/<run_id>.md`
+- `vault/index.md`;
+- `vault/log.md`;
+- `vault/wiki/index.md`;
+- `vault/wiki/sources/<source_id>.md`;
+- `vault/wiki/concepts/<concept_id>.md`;
+- `vault/outputs/<run_id>.md`.
 
-It also writes runtime artifacts to `artifacts/`:
+Runtime artifacts пишутся в `artifacts/`:
 
-- `context/<run_id>.json`
-- `runs/<run_id>.json`
-- `traces/<run_id>.jsonl`
+- `context/<run_id>.json`;
+- `runs/<run_id>.json`;
+- `traces/<run_id>.jsonl`.
 
-## Tag Policy
+## Git-метки
 
-When this becomes a public repo, LMS should link to exact tags:
+Когда LMS ссылается на репозиторий, она должна вести на точные git-метки.
+Метка — это фиксированная версия проекта для конкретного этапа курса.
 
-- `m0-start`
-- `m0-solution`
-- `m1-start`
-- `m1-solution`
-- `m2-start`
-- `m2-solution`
-- `m3-start`
-- `m3-solution`
-- `stretch-a-solution`
-- `stretch-b-solution`
+Ожидаемые метки:
+
+- `m0-start`;
+- `m0-solution`;
+- `m1-start`;
+- `m1-solution`;
+- `m2-start`;
+- `m2-solution`;
+- `m3-start`;
+- `m3-solution`;
+- `stretch-a-solution`;
+- `stretch-b-solution`.
