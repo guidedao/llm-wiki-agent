@@ -18,3 +18,7 @@ jobs:
         run: uv run kb-agent --help
       - name: Run tests
         run: uv run --with pytest python -m pytest
+      - name: Run demo path
+        run: uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
+      - name: Run eval path
+        run: uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
