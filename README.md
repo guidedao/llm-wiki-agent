@@ -182,3 +182,21 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 ```
 
 Эта команда не удаляет `vault/raw/`.
+
+## Как просить о помощи
+
+Если запуск не проходит, приложите к вопросу короткий debug-пакет:
+
+- версию ОС и вывод `uv --version`;
+- commit SHA или ссылку на репозиторий;
+- точную команду, которая упала;
+- первые строки ошибки;
+- если `run_id` уже появился: `artifacts/runs/<run_id>.json`,
+  `artifacts/health/<run_id>.json` и последние строки
+  `artifacts/traces/<run_id>.jsonl`.
+
+Не публикуйте `OPENAI_API_KEY`, `.env` и другие секреты. Если сомневаетесь,
+сначала удалите из вывода всё, что похоже на ключ, токен или приватный URL.
+
+Подробный чеклист отладки лежит в `docs/troubleshooting.md`, а карта
+расширений после базового среза — в `docs/roadmap.md`.
