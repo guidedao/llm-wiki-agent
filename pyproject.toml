@@ -5,18 +5,22 @@ build-backend = "hatchling.build"
 [project]
 name = "llm-wiki-agent"
 version = "0.1.0"
-description = "Local knowledge-base agent capstone scaffold for the Guidedao AI agents course."
+description = "Учебный каркас агента корпоративной LLM Wiki для курса Guidedao по AI-агентам."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
 
 [project.optional-dependencies]
+openai = [
+  "openai>=2.0.0",
+]
 dev = [
   "pytest>=8.0.0",
 ]
 
 [project.scripts]
 kb-agent = "kb_agent.app.cli:main"
+kb-eval = "kb_agent.app.eval_cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/kb_agent"]

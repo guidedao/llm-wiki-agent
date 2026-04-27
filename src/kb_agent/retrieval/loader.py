@@ -1,1 +1,1 @@
-"""Placeholder for loading local corpora in M2."""
+"""Заготовка загрузки локальных корпусов для M2."""

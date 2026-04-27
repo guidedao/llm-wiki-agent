@@ -1,2 +1,1 @@
-"""Guidedao AI agents capstone package."""
-
+"""Пакет кэпстоун-проекта Guidedao по AI-агентам."""

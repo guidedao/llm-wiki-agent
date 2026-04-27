@@ -1,69 +1,71 @@
-# Obsidian Setup
+# Настройка Obsidian
 
-Obsidian is the recommended human-facing frontend for this capstone.
+Obsidian — рекомендуемый человекочитаемый интерфейс для этого
+кэпстоун-проекта.
 
-We can recommend it directly to students because it is free and the onboarding
-cost is low.
+Мы можем прямо рекомендовать его студентам: он бесплатный, быстро ставится и
+не требует отдельной продуктовой настройки.
 
-If you prefer, the capstone still works with any editor or file browser.
+Если Obsidian не подходит, проект всё равно работает с любым редактором или
+файловым менеджером.
 
-Why:
+Почему это удобно:
 
-- the vault is just files on disk;
-- you can inspect `raw`, `wiki`, and `outputs` without extra product work;
-- this matches the `LLM Knowledge Bases` workflow well.
+- `vault/` — это обычные файлы на диске;
+- `raw`, `wiki` и `outputs` можно открыть без отдельной админки;
+- такой просмотр хорошо совпадает с подходом `LLM Knowledge Bases`.
 
-## Install
+## Установка
 
-Use the official download page:
+Используйте официальную страницу загрузки:
 
-- [Obsidian Download](https://obsidian.md/download)
+- [Скачать Obsidian](https://obsidian.md/download)
 
-Official docs on vaults:
+Официальная справка по vault:
 
 - [Obsidian Help: Vault](https://obsidian.md/help/vault)
 
-## Open The Vault
+## Открыть Vault
 
-1. Install Obsidian.
-2. Choose `Open folder as vault`.
-3. Select the `vault/` folder inside your local clone of this repository.
+1. Установите Obsidian.
+2. Выберите `Open folder as vault`.
+3. Выберите папку `vault/` внутри локальной копии репозитория.
 
-After that, you should see:
+После этого вы должны увидеть:
 
-- `index.md` as the vault entrypoint
-- `log.md` as the run log
-- `raw/` for source documents
-- `wiki/` for compiled knowledge pages
-- `outputs/` for generated answers and artifacts
+- `index.md` как входную страницу;
+- `log.md` как журнал запусков;
+- `raw/` с исходными документами;
+- `wiki/` со скомпилированными страницами знаний;
+- `outputs/` с ответами и сводками запусков.
 
-## Recommended First Run
+## Первый Рекомендуемый Запуск
 
-1. From the repo root, run:
+1. Из корня репозитория выполните:
 
 ```bash
-just demo
+uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
 ```
 
-2. In Obsidian, open:
+2. В Obsidian откройте:
 
 - `index.md`
 - `log.md`
 - `wiki/index.md`
-- the latest file in `outputs/`
+- последний файл в `outputs/`
 
-This gives you the intended capstone loop immediately:
+Так вы сразу увидите основной цикл кэпстоун-проекта:
 
-- source files on disk
-- a stable entrypoint and run log
-- compiled wiki page
-- grounded output file
-- all visible in one vault
+- исходные файлы на диске;
+- стабильную входную страницу и журнал запусков;
+- скомпилированную wiki-страницу;
+- ответ, привязанный к источникам;
+- всё это в одном vault.
 
-## Scope Reminder
+## Граница Объёма
 
-For this capstone, Obsidian is a frontend for browsing the vault.
+В этом кэпстоун-проекте Obsidian — только интерфейс для просмотра `vault/`.
 
-It is **not** the main subject of the course.
+Он **не** является главной темой курса.
 
-We are not building an Obsidian plugin or a generic PKM platform.
+Мы не строим плагин для Obsidian и не делаем универсальную PKM-платформу.

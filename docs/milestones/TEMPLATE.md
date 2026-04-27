@@ -1,23 +1,23 @@
-# Milestone Template
+# Шаблон вехи
 
-## Goal
+## Цель
 
-В этом milestone мы добавляем ...
+В этой вехе мы добавляем ...
 
-## Course Bridge
+## Связь с курсом
 
 - ...
 - ...
 
-## Start State
+## Стартовое состояние
 
-- start tag: `mx-start`
-- prerequisites:
+- точка входа: текущий `main` и этот milestone-док
+- предварительные условия:
   - ...
 - до начала уже должно работать:
   - ...
 
-## Scope
+## Объём
 
 Нужно сделать:
 
@@ -25,41 +25,42 @@
 - ...
 - ...
 
-Out of scope:
+Вне объёма:
 
 - ...
 - ...
 
-## Commands
+## Команды
 
-- `just test`
-- `just demo`
+- `uv sync --frozen --extra dev`
+- `uv run --with pytest python -m pytest`
+- `uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault`
 
-## Expected Artifacts
+## Ожидаемые артефакты
 
 - `...`
 - `...`
 - `...`
 
-## Acceptance Checks
+## Критерии приёмки
 
-- [ ] `just test` green
-- [ ] `just demo` green
+- [ ] `uv run --with pytest python -m pytest` проходит
+- [ ] `uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault` проходит
 - [ ] появился `...`
-- [ ] в trace есть `...`
-- [ ] в output видно `...`
+- [ ] в трейсе есть `...`
+- [ ] в выводе видно `...`
 
-## Debugging Cues
+## Подсказки для отладки
 
 - если не появился `...`, проверь ...
-- если trace не содержит `...`, проверь ...
-- если answer не grounded, сравни ...
+- если трейс не содержит `...`, проверь ...
+- если ответ не привязан к источникам, сравни ...
 
-## Solution Reference
+## Решение
 
-- solution tag: `mx-solution`
+- решение фиксируется текущим состоянием `main` и артефактами запуска
 
-## Next
+## Дальше
 
-- optional stretch: ...
-- следующий milestone: ...
+- опциональное расширение: ...
+- следующая веха: ...

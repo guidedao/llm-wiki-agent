@@ -1,1 +1,1 @@
-"""Placeholder for reranking logic in M2."""
+"""Заготовка логики rerank для M2."""

@@ -1,1 +1,1 @@
-"""Prompt templates will live here once M1 starts."""
+"""Здесь будут жить шаблоны промптов после старта M1."""

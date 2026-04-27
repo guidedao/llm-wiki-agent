@@ -1,12 +1,40 @@
 from __future__ import annotations
 
 
+STOP_TERMS = {
+    "and",
+    "compute",
+    "northstar",
+    "the",
+    "wiki",
+    "база",
+    "базе",
+    "базу",
+    "говорит",
+    "знаний",
+    "какая",
+    "какие",
+    "какой",
+    "как",
+    "компания",
+    "описана",
+    "описано",
+    "описаны",
+    "под",
+    "про",
+    "что",
+    "это",
+}
+
+
 def normalize_query_terms(query: str) -> list[str]:
-    return [
-        term.strip(".,:;!?()[]{}\"'").lower()
-        for term in query.split()
-        if term.strip()
-    ]
+    terms: list[str] = []
+    for item in query.split():
+        term = item.strip(".,:;!?()[]{}\"'").lower()
+        if not term or len(term) <= 2 or term in STOP_TERMS:
+            continue
+        terms.append(term)
+    return terms
 
 
 def rank_documents(query: str, documents: list[dict], limit: int = 2) -> list[dict]:

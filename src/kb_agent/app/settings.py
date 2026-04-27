@@ -9,9 +9,15 @@ from pathlib import Path
 class Settings:
     artifacts_dir: Path
     environment: str
+    openai_model: str
 
 
 def load_settings() -> Settings:
     artifacts_dir = Path(os.getenv("ARTIFACTS_DIR", "artifacts"))
     environment = os.getenv("KB_AGENT_ENV", os.getenv("BRIEFING_AGENT_ENV", "local"))
-    return Settings(artifacts_dir=artifacts_dir, environment=environment)
+    openai_model = os.getenv("OPENAI_MODEL", "gpt-5-mini")
+    return Settings(
+        artifacts_dir=artifacts_dir,
+        environment=environment,
+        openai_model=openai_model,
+    )

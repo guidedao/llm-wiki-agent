@@ -1,3 +1,3 @@
-# Scripts
+# Скрипты
 
-This directory is reserved for future helper scripts.
+Эта папка зарезервирована под будущие вспомогательные скрипты.

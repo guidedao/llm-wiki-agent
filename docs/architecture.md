@@ -1,35 +1,75 @@
-# Architecture Notes
+# Архитектурные заметки
 
-The capstone is intentionally CLI-first and local-first.
+Кэпстоун-проект намеренно остаётся ориентированным на CLI, локальный запуск и
+OpenAI-first подход для live-пути ответа. Учебный корпус описывает вымышленную
+AI-инфраструктурную компанию Northstar Compute: GPU-облако, датацентры,
+планирование capacity, клиентов, pricing, рынок и инциденты кластеров.
 
-Human-facing browsing happens through Obsidian over the repo `vault/`.
+Человекочитаемый просмотр происходит через Obsidian поверх `vault/` в
+репозитории.
 
-Current `M0` path:
+Текущий путь `M0`:
 
-1. keep `vault/index.md` and `vault/log.md` as first-class navigation artifacts;
-2. load a local markdown corpus from `vault/raw/`;
-3. compile one overview wiki page into `vault/wiki/index.md`;
-4. retrieve relevant local documents for a fixed query;
-5. write a grounded markdown answer into `vault/outputs/`;
-6. persist a run record and trace into `artifacts/`.
+1. держит `vault/index.md` и `vault/log.md` как основные навигационные
+   артефакты;
+2. загружает локальный Markdown-корпус из `vault/raw/`;
+3. держит `docs/wiki-schema.md` как явную схему устройства wiki;
+4. компилирует обзорную wiki-страницу в `vault/wiki/index.md`;
+5. достаёт релевантные локальные документы под фиксированный вопрос;
+6. записывает Markdown-ответ с опорой на источники в `vault/outputs/`;
+7. сохраняет запись запуска и трейс в `artifacts/`.
 
-Current `M1` slice:
+Текущий слой `M1`:
 
-1. compile `vault/wiki/sources/` and `vault/wiki/concepts/`;
-2. query the wiki layer first through `index -> concepts -> sources`;
-3. resolve source notes from wiki links;
-4. persist a context packet into `artifacts/context/`.
+1. компилирует `vault/wiki/sources/` и `vault/wiki/concepts/`;
+2. сначала опрашивает wiki-слой через `index → concepts → sources`;
+3. разворачивает исходные заметки из wiki-ссылок;
+4. сохраняет пакет контекста в `artifacts/context/`;
+5. при `--live-openai` отправляет в OpenAI Responses API только выбранный
+   вопрос, wiki-контекст и исходное основание для финального ответа.
 
-Current `M2` slice:
+Текущий слой `M2`:
 
-1. build a short answer plan before the final answer;
-2. persist `artifacts/plans/<run_id>.json`;
-3. link plan steps to selected wiki and raw context;
-4. write planning events into the JSONL trace.
+1. строит короткий план ответа перед финальным ответом;
+2. сохраняет `artifacts/plans/<run_id>.json`;
+3. связывает шаги плана с выбранным wiki- и raw-контекстом;
+4. пишет события планирования в JSONL-трейс.
 
-Later milestones will add:
+Текущий слой `M3`:
 
-- wiki-aware tools;
-- richer planning and bounded maintenance actions;
-- runtime state, health checks, and retries;
-- controlled write-back and evals.
+1. трактует `artifacts/runs/<run_id>.json` как запись состояния запуска;
+2. помечает успешное завершение через `terminal_reason`;
+3. пишет `artifacts/health/<run_id>.json` как машинно-читаемый отчёт проверки состояния;
+4. сохраняет `artifacts/tools/<run_id>.json` как реестр контрактов инструментов;
+5. пишет `vault/outputs/<run_id>-summary.md` как первую человекочитаемую карточку
+   запуска после демо;
+6. держит `run_budget.yaml` как читаемый бюджет по стадиям runtime;
+7. запускает детерминированный mini-eval через `uv run kb-eval`.
+
+Текущие границы доверия:
+
+1. считать `vault/raw/` исходным материалом только для чтения во время demo-запуска;
+2. считать `docs/wiki-schema.md` правилами структуры и процедур только для чтения;
+3. считать `vault/wiki/` сгенерированным слоем знаний, а не состоянием, принадлежащим модели;
+4. писать финальные ответы только в `vault/outputs/`;
+5. писать операционные доказательства только в `artifacts/`;
+6. держать ответ OpenAI Responses за тем же путём записи, который контролирует
+   приложение;
+7. оставить обратную запись, подтверждения и применение patch для более поздней вехи.
+
+Правило тестирования:
+
+1. live-команда с `uv run --extra openai kb-agent ... --live-openai` —
+   канонический live-путь при наличии `OPENAI_API_KEY`;
+2. `uv run kb-agent`, `uv run kb-eval` и `uv run --with pytest python -m pytest`
+   остаются детерминированными путями на фикстурах для CI, офлайн-работы и
+   стабильного сравнения;
+3. тесты live-пути используют внедрённый тестовый клиент Responses, а не реальный
+   API-ключ.
+
+Следующие вехи добавят:
+
+- инструменты, которые понимают wiki-слой;
+- более богатое планирование и ограниченные действия обслуживания;
+- повторы, pause/resume и операторское исправление;
+- контролируемая обратная запись и более богатые регрессионные отчёты.

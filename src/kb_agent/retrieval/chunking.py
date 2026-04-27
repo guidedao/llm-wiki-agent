@@ -1,1 +1,1 @@
-"""Placeholder for chunking logic in M2."""
+"""Заготовка логики чанкинга для M2."""

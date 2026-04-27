@@ -1,1 +1,1 @@
-"""Placeholder for the agent loop added in M1."""
+"""Заготовка агентной петли для M1."""

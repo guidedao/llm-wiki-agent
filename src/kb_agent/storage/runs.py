@@ -1,1 +1,1 @@
-"""Persistent run storage will be expanded in M3."""
+"""Постоянное хранилище запусков будет расширено в M3."""

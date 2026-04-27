@@ -1,67 +1,75 @@
-# Dependency Policy
+# Политика зависимостей
 
-## Goal
+## Цель
 
-The capstone should test agent engineering skill, not the student's ability to
-purchase and configure multiple third-party data subscriptions.
+Кэпстоун-проект должен проверять инженерные навыки агентной разработки, а не
+умение студента покупать и настраивать несколько сторонних подписок.
 
-## Core Path
+## Базовый путь
 
-The required student path should work with:
+Обязательный путь студента должен работать с:
 
 - Python `3.11`
 - `uv`
-- `just`
-- local fixtures
-- deterministic smoke tests
+- локальными фикстурами
+- детерминированными smoke-тестами
 
-The default live LLM path for later milestones should use:
+Основной live-путь с LLM, видимый студенту, должен использовать:
 
+- OpenAI Responses API
 - `OPENAI_API_KEY`
+- зависимость `openai` через `uv run --extra openai`
 
-This path must remain enough to:
+Этого пути должно быть достаточно, чтобы:
 
-- run the demo;
-- complete core milestones;
-- pass local tests;
-- understand the architecture.
+- сравнить детерминированный ответ с ответом реальной модели;
+- посмотреть метаданные ответа;
+- понять OpenAI-first архитектуру проекта.
 
-Current note:
+Текущая договорённость:
 
-- `M0` is fully local and does not require `OPENAI_API_KEY` yet.
+- `uv run --with pytest python -m pytest`, `uv run kb-agent ...` и
+  `uv run kb-eval ...` — обязательный путь для проверки и CI.
+- live-команда с `uv run --extra openai kb-agent ... --live-openai` —
+  канонический live-путь, если у студента есть `OPENAI_API_KEY`.
+- Ни одна базовая веха не должна требовать `OPENAI_API_KEY`.
+- Live-артефакты не должны сохранять секреты или дампы окружения.
+- Базовый live-режим должен оставаться одним вызовом Responses API для
+  финального ответа, а не hosted web search, File Search, computer use,
+  фоновые задачи или постоянное состояние диалога.
 
-## Search And Social Policy
+## Поиск и социальные источники
 
-### Required
+### Обязательно
 
-- local fixture-backed source discovery
-- manual URL input
+- поиск источников по локальным фикстурам
+- ручной ввод URL
 
-### Optional Recommended
+### Опционально
 
-- `Brave Search API` as a live web-search adapter
+- `Brave Search API` как live-адаптер веб-поиска
 
-Why it is only optional:
+Почему только опционально:
 
-- it adds billing and quota setup;
-- it creates support surface around rate limits and provider churn;
-- core milestones should not depend on fresh web results.
+- добавляет billing и настройку квот;
+- создаёт поверхность поддержки вокруг rate limits и нестабильности провайдера;
+- базовые вехи не должны зависеть от свежих результатов из веба.
 
-### Stretch Only
+### Только расширение
 
 - `X API`
 
-Why it is not part of the core path:
+Почему это не часть базового пути:
 
-- higher access volatility;
-- extra auth and credit-management complexity;
-- too much student effort shifts from agent architecture to platform setup.
+- более высокая нестабильность доступа;
+- дополнительная сложность авторизации и управления кредитами;
+- слишком много усилий уходит с агентной архитектуры на настройку платформы.
 
-## Architecture Rule
+## Архитектурное правило
 
-The repository should teach interfaces, not vendor lock-in.
+Репозиторий должен учить интерфейсам, а не привязке к одному вендору.
 
-Recommended shape:
+Рекомендуемая форма:
 
 - `SourceDiscovery`
   - `fixtures`
@@ -69,14 +77,15 @@ Recommended shape:
   - optional `brave_search`
 - `Fetcher`
 - `Normalizer`
-- later optional `SocialSource`
+- позже опциональный `SocialSource`
 
-## Student Contract
+## Контракт со студентом
 
-Students should be able to complete the capstone without:
+Студент должен иметь возможность пройти кэпстоун-проект без:
 
 - Brave billing
 - X credits
-- social-platform app approval
+- approval приложения от социальной платформы
 
-Optional live integrations should feel like product extensions, not a paywall.
+Опциональные live-интеграции должны ощущаться как продуктовые расширения, а не
+как paywall.

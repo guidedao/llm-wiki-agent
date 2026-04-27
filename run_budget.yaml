@@ -1,0 +1,28 @@
+version: 1
+default_currency: usd
+stages:
+  corpus_boot:
+    max_seconds: 5
+    model_role: deterministic_local
+    external_calls_allowed: false
+  retrieval:
+    max_seconds: 10
+    model_role: deterministic_local
+    external_calls_allowed: false
+  planning:
+    max_seconds: 10
+    model_role: small_reasoning
+    external_calls_allowed: false
+  answer_fixture:
+    max_seconds: 15
+    model_role: deterministic_local
+    external_calls_allowed: false
+  answer_live:
+    max_seconds: 30
+    model_role: course_default_llm
+    external_calls_allowed: true
+    provider: openai_responses
+  health:
+    max_seconds: 5
+    model_role: deterministic_local
+    external_calls_allowed: false

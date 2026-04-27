@@ -1,1 +1,1 @@
-"""Placeholder for approval gate support in Stretch A."""
+"""Заготовка гейта подтверждения для расширения A."""

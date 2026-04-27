@@ -1,1 +1,1 @@
-"""Placeholder for web search tool in M1."""
+"""Заготовка инструмента веб-поиска для M1."""

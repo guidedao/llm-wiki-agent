@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "id": "capacity_planning_grounding",
+      "question": "Зачем Lumen Labs нужен буфер capacity?",
+      "expected_behavior": "answer",
+      "expected_sources": ["capacity-planning-q2", "customer-call-lumen-labs"],
+      "forbidden_sources": []
+    },
+    {
+      "id": "incident_diagnostics_grounding",
+      "question": "Что случилось в Aurora-17 и зачем нужен трейс запуска?",
+      "expected_behavior": "answer",
+      "expected_sources": ["incident-aurora-17"],
+      "forbidden_sources": []
+    },
+    {
+      "id": "insufficient_context_abstain",
+      "question": "Какая политика отпусков описана в корпусе?",
+      "expected_behavior": "abstain",
+      "expected_sources": [],
+      "forbidden_sources": [
+        "company-brief",
+        "capacity-planning-q2",
+        "customer-call-lumen-labs",
+        "incident-aurora-17",
+        "pricing-margin-memo",
+        "market-competitors"
+      ]
+    }
+  ]
+}

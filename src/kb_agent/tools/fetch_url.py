@@ -1,1 +1,1 @@
-"""Placeholder for URL fetch tool in M1."""
+"""Заготовка инструмента загрузки URL для M1."""

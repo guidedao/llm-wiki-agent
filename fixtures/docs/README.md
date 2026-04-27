@@ -1,3 +1,7 @@
-# Local Fixtures
+# Локальные фикстуры
 
-This directory will hold small local corpora for retrieval milestones.
+Здесь лежат маленькие локальные корпуса для retrieval-вех.
+
+Текущий видимый студенту корпус находится в `vault/raw/` и описывает вымышленную
+AI-инфраструктурную компанию Northstar Compute: GPU-кластеры, клиентов,
+планирование capacity, pricing, рынок и инциденты.

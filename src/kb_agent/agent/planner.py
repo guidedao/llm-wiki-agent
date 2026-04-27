@@ -24,7 +24,7 @@ def build_answer_plan(
             PlanStep(
                 step_id="step-1",
                 title="Снять рабочие концепты",
-                goal="Понять, какие понятия из wiki задают рамку ответа до чтения raw notes.",
+                goal="Понять, какие понятия из wiki задают рамку ответа до чтения raw-заметок.",
                 retrieval_query=" ".join([question, *concept_titles[:2]]).strip(),
                 target_layer="concepts",
                 candidate_ids=[document["note_id"] for document in concept_documents],
@@ -35,8 +35,8 @@ def build_answer_plan(
         steps.append(
             PlanStep(
                 step_id="step-2",
-                title="Проверить опорные source pages",
-                goal="Уточнить, какие source pages дают наиболее надёжную опору под вопрос.",
+                title="Проверить опорные страницы источников",
+                goal="Уточнить, какие страницы источников дают наиболее надёжную опору под вопрос.",
                 retrieval_query=" ".join([question, *source_titles[:2]]).strip(),
                 target_layer="sources",
                 candidate_ids=[document["note_id"] for document in source_documents],
@@ -46,8 +46,8 @@ def build_answer_plan(
     steps.append(
         PlanStep(
             step_id=f"step-{len(steps) + 1}",
-            title="Собрать grounded answer",
-            goal="Поднять raw evidence и собрать ответ с явной привязкой к выбранному контексту.",
+            title="Собрать grounded-ответ",
+            goal="Поднять raw-опору и собрать ответ с явной привязкой к выбранному контексту.",
             retrieval_query=" ".join([question, *concept_titles[:2], *source_titles[:2]]).strip(),
             target_layer="raw",
             candidate_ids=[document["source_id"] for document in source_documents],

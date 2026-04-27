@@ -1,1 +1,1 @@
-"""Placeholder for retry policy in M3."""
+"""Заготовка retry-политики для M3."""

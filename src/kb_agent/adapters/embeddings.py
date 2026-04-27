@@ -1,1 +1,1 @@
-"""Placeholder for future embeddings adapter work."""
+"""Заготовка для будущего адаптера эмбеддингов."""
