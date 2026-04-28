@@ -92,7 +92,7 @@ def default_tool_contracts() -> list[ToolContract]:
                 {
                     "query": {
                         "type": "string",
-                        "description": "Вопрос пользователя или уточнённый retrieval-запрос.",
+                        "description": "Вопрос пользователя или уточнённый запрос для ретривала.",
                     },
                     "limit": {
                         "type": "integer",

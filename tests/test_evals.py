@@ -18,7 +18,7 @@ def test_eval_suite_covers_grounding_and_abstain_cases(tmp_path):
     payload = json.loads(report_path.read_text(encoding="utf-8"))
 
     assert payload["status"] == "pass"
-    assert payload["summary"]["case_count"] == 3
+    assert payload["summary"]["case_count"] == 5
     assert any(
         result["expected_behavior"] == "abstain" and result["passed"]
         for result in payload["results"]

@@ -56,7 +56,7 @@ def build_grounded_answer_with_openai(
     documents: list[dict],
     *,
     wiki_documents: list[dict] | None = None,
-    model: str = "gpt-5-mini",
+    model: str = "gpt-5.4-mini",
     client: Any | None = None,
 ) -> OpenAIAnswer:
     if client is None:

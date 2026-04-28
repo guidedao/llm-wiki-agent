@@ -27,6 +27,20 @@
         "pricing-margin-memo",
         "market-competitors"
       ]
+    },
+    {
+      "id": "pricing_margin_grounding",
+      "question": "Как pricing связан с маржой и обещаниями клиенту?",
+      "expected_behavior": "answer",
+      "expected_sources": ["pricing-margin-memo"],
+      "forbidden_sources": []
+    },
+    {
+      "id": "market_position_grounding",
+      "question": "С какими альтернативами конкурирует Northstar Compute?",
+      "expected_behavior": "answer",
+      "expected_sources": ["market-competitors"],
+      "forbidden_sources": []
     }
   ]
 }

@@ -10,7 +10,7 @@ def score_eval_case(case: dict, ranked_documents: list[dict]) -> dict:
 
     if expected_behavior == "abstain":
         passed = not positive_ranked
-        failure_reason = None if passed else "ожидался отказ от ответа, но retrieval нашёл контекст"
+        failure_reason = None if passed else "ожидался отказ от ответа, но ретривал нашёл контекст"
     else:
         missing_sources = [
             source_id for source_id in expected_sources if source_id not in selected_sources

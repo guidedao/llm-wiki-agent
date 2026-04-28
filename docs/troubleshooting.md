@@ -83,3 +83,5 @@ OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queri
 Ищите не «плохой ответ вообще», а конкретный слой: нет файла, пустой контекст,
 не совпали источники, не создан eval-отчёт или запуск завершился не тем
 `terminal_reason`.
+
+Если нужен маршрут «куда смотреть по шагам», используйте `docs/runbook.md`.
