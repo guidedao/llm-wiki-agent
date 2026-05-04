@@ -40,7 +40,7 @@ class ToolContract:
 
     def as_responses_tool(self) -> dict:
         if self.access != "read_only" or not self.model_safe:
-            raise ValueError(f"{self.name} нельзя безопасно отдать модели как инструмент.")
+            raise ValueError(f"{self.name} нельзя безопасно отдать модели как тул.")
         return {
             "type": "function",
             "name": self.name,

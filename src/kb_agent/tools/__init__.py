@@ -1,4 +1,4 @@
-"""Слой инструментов."""
+"""Слой тулов."""
 
 from kb_agent.tools.contracts import (
     ToolContract,
