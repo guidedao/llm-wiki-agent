@@ -84,6 +84,7 @@ def build_grounded_answer_with_openai(
             documents,
             wiki_documents=wiki_documents,
         ),
+        store=False,
     )
     return OpenAIAnswer(
         output_text=getattr(response, "output_text", "") or "",

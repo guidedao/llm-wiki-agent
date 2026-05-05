@@ -61,6 +61,7 @@ def test_openai_responses_adapter_uses_fake_client():
     assert "Что база говорит про инцидент Aurora-17?" in call["input"]
     assert "incident-aurora-17" in call["input"]
     assert "concepts/incident-diagnostics" in call["input"]
+    assert call["store"] is False
     assert answer.response_id == "resp_123"
     assert answer.model == "gpt-test"
     assert answer.output_text.startswith("# Ответ")
