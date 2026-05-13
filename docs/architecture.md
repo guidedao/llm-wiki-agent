@@ -61,7 +61,7 @@ AI-инфраструктурную компанию Northstar Compute: GPU-об
 
 1. live-команда с `uv run --extra openai kb-agent ... --live-openai` —
    канонический live-путь при наличии `OPENAI_API_KEY`;
-2. `uv run kb-agent`, `uv run kb-eval` и `uv run --with pytest python -m pytest`
+2. `uv run kb-agent`, `uv run kb-eval` и `uv run pytest`
    остаются детерминированными путями на фикстурах для CI, офлайн-работы и
    стабильного сравнения;
 3. тесты live-пути используют внедрённый тестовый клиент Responses, а не реальный

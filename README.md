@@ -65,7 +65,7 @@ CoreWeave или других компаний.
 ```bash
 cd llm-wiki-agent
 uv sync --frozen --extra dev
-uv run --with pytest python -m pytest
+uv run pytest
 uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
@@ -80,9 +80,9 @@ uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 | Команда | Что делает | Когда запускать | Успешный результат |
 | --- | --- | --- | --- |
 | `uv sync --frozen --extra dev` | ставит зависимости через `uv` | один раз после клонирования | зависимости установлены без ошибок |
-| `uv run --with pytest python -m pytest` | запускает тесты проекта | перед сдачей и после правок | `passed` в выводе pytest |
+| `uv run pytest` | запускает тесты проекта | перед сдачей и после правок | `passed` в выводе pytest |
 | `uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault` | собирает локальный wiki-путь без API-ключа | чтобы увидеть артефакты запуска и проверить M2/M3 | появился `run_id`, ответ, сводка и отчёт проверки состояния |
-| `uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault` | запускает маленький eval-набор | для финальной сдачи M3 | `status: pass`, `passed_count == case_count` |
+| `uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault` | запускает маленький eval-набор | для финальной сдачи M3 | `status: pass`, `summary.passed_count == summary.case_count` |
 | `rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md` | сбрасывает только производные файлы | если нужно начать локальный прогон заново | остаётся только исходный `vault/raw/` |
 | `OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault --live-openai` | делает финальный ответ через OpenAI Responses API | опционально, если есть ключ | появился `artifacts/responses/<run_id>.json` |
 

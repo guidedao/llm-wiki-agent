@@ -13,7 +13,7 @@
 
 ```bash
 uv sync --frozen --extra dev
-uv run --with pytest python -m pytest
+uv run pytest
 uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
@@ -33,6 +33,13 @@ uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 2. На какие источники опирается ответ:
 3. Что показала проверка состояния:
 4. Что показали evals:
+
+## Как проходил маршрут
+
+- Сколько времени занял первый успешный запуск:
+- Что первым сбило с толку:
+- Где понадобилась помощь:
+- Насколько уверенно я могу объяснить `run_id` и артефакты запуска по шкале 1-5:
 
 ## Что осталось вне объёма
 

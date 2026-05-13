@@ -33,7 +33,7 @@
 ## Команды
 
 - `uv sync --frozen --extra dev`
-- `uv run --with pytest python -m pytest`
+- `uv run pytest`
 - `uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault`
 
 ## Ожидаемые артефакты
@@ -44,7 +44,7 @@
 
 ## Критерии приёмки
 
-- [ ] `uv run --with pytest python -m pytest` проходит
+- [ ] `uv run pytest` проходит
 - [ ] `uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault` проходит
 - [ ] появился `...`
 - [ ] в трейсе есть `...`

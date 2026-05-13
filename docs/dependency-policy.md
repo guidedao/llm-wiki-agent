@@ -28,7 +28,7 @@
 
 Текущая договорённость:
 
-- `uv run --with pytest python -m pytest`, `uv run kb-agent ...` и
+- `uv run pytest`, `uv run kb-agent ...` и
   `uv run kb-eval ...` — обязательный путь для проверки и CI.
 - live-команда с `uv run --extra openai kb-agent ... --live-openai` —
   канонический live-путь, если у студента есть `OPENAI_API_KEY`.

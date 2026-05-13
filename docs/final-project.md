@@ -85,7 +85,7 @@ GPU-infrastructure.
 
 ```bash
 uv sync --frozen --extra dev
-uv run --with pytest python -m pytest
+uv run pytest
 uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
@@ -140,6 +140,26 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 6. откройте отчёт проверки состояния и eval-отчёт: оба должны иметь `status: pass`.
 
 Для короткой инженерной заметки можно использовать `docs/handoff-template.md`.
+
+## Пакет сдачи
+
+В LMS не нужно прикладывать весь репозиторий целиком. Подготовьте короткий
+пакет, по которому можно быстро прочитать один запуск:
+
+1. ссылка на репозиторий или архив проекта;
+2. commit SHA или дата локального среза;
+3. один `run_id`, который вы проверяли руками;
+4. `vault/outputs/<run_id>-summary.md`;
+5. `vault/outputs/<run_id>.md`;
+6. `artifacts/context/<run_id>.json`;
+7. `artifacts/tools/<run_id>.json`;
+8. `artifacts/health/<run_id>.json`;
+9. последние строки `artifacts/traces/<run_id>.jsonl`;
+10. eval-отчёт из `artifacts/evals/`;
+11. короткая заметка по шаблону `docs/handoff-template.md`.
+
+Если live-путь через OpenAI Responses API не запускался, просто напишите это в
+заметке. Базовая сдача не должна зависеть от наличия API-ключа.
 
 ## Рубрика
 

@@ -34,7 +34,7 @@
 
 ```bash
 uv sync --frozen --extra dev
-uv run --with pytest python -m pytest
+uv run pytest
 uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
