@@ -422,3 +422,29 @@ def test_live_openai_blocks_obvious_secrets_in_local_context(tmp_path, monkeypat
         assert "secret-note" in str(exc)
     else:
         raise AssertionError("live-путь OpenAI должен блокировать очевидные локальные секреты")
+
+
+def test_live_openai_blocks_obvious_secrets_in_question(tmp_path, monkeypatch):
+    root = Path(__file__).resolve().parents[1]
+    vault_root = tmp_path / "vault"
+    artifacts_dir = tmp_path / "artifacts"
+    shutil.copytree(root / "vault" / "raw", vault_root / "raw")
+    monkeypatch.setenv("ARTIFACTS_DIR", str(artifacts_dir))
+
+    try:
+        cli_main(
+            [
+                "--vault-root",
+                str(vault_root),
+                "--question",
+                "Проверь ключ OPENAI_API_KEY=sk-test-secret-value-that-should-not-ship",
+                "--live-openai",
+            ],
+            openai_client=FakeClient(),
+        )
+    except RuntimeError as exc:
+        assert "вопрос похож" in str(exc)
+    else:
+        raise AssertionError("live-путь OpenAI должен блокировать секреты в вопросе")
+
+    assert not artifacts_dir.exists()

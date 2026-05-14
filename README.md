@@ -62,6 +62,8 @@ CoreWeave или других компаний.
 
 ## Быстрый Старт
 
+Все команды ниже запускаются из корня репозитория `llm-wiki-agent`.
+
 ```bash
 cd llm-wiki-agent
 uv sync --frozen --extra dev
@@ -76,6 +78,10 @@ uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 Фикстура `fixtures/queries/m2_query.json` — основной учебный запрос для текущего
 маршрута M2/M3. Старый `m0_query.json` оставлен только для совместимости ранних
 заметок и тестов.
+
+В чистом клоне `artifacts/`, `vault/wiki/`, `vault/outputs/`, `vault/index.md`
+и `vault/log.md` могут отсутствовать. Они появляются после первого успешного
+`kb-agent`.
 
 | Команда | Что делает | Когда запускать | Успешный результат |
 | --- | --- | --- | --- |

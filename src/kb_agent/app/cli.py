@@ -142,6 +142,7 @@ def main(argv: list[str] | None = None, *, openai_client: Any | None = None) -> 
     if args.live_openai:
         _raise_if_live_context_looks_private(
             corpus,
+            question=query_fixture["question"],
             allow=args.allow_live_private_context,
         )
     concepts = build_concept_catalog(corpus)
@@ -605,9 +606,15 @@ def main(argv: list[str] | None = None, *, openai_client: Any | None = None) -> 
     return 0
 
 
-def _raise_if_live_context_looks_private(corpus: list[dict], *, allow: bool) -> None:
+def _raise_if_live_context_looks_private(corpus: list[dict], *, question: str, allow: bool) -> None:
     if allow:
         return
+    if any(pattern.search(question) for pattern in SECRET_PATTERNS):
+        raise RuntimeError(
+            "--live-openai отправит вопрос в OpenAI, а вопрос похож на содержащий "
+            "секрет. Уберите секрет из вопроса или перезапустите команду с "
+            "--allow-live-private-context."
+        )
     flagged = [
         document["source_id"]
         for document in corpus
