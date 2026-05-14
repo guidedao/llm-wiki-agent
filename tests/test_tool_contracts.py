@@ -19,6 +19,8 @@ def test_tool_contracts_separate_read_and_write_surfaces():
     assert by_name["read_raw_source"].access == "read_only"
     assert by_name["compile_wiki_layer"].access == "write"
     assert by_name["write_answer_artifact"].writes_to == ["vault/outputs/"]
+    assert by_name["propose_wiki_update"].writes_to == ["artifacts/proposals/"]
+    assert by_name["propose_wiki_update"].model_safe is False
     assert not by_name["write_answer_artifact"].model_safe
 
 
@@ -27,6 +29,7 @@ def test_responses_ready_tools_export_only_read_only_contracts():
     names = {tool["name"] for tool in tools}
 
     assert names == {"search_wiki", "read_raw_source"}
+    assert "propose_wiki_update" not in names
     assert all(tool["type"] == "function" for tool in tools)
     assert all(tool["strict"] is True for tool in tools)
     assert all(tool["parameters"]["additionalProperties"] is False for tool in tools)

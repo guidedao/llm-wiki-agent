@@ -25,6 +25,10 @@ from kb_agent.retrieval.context_packet import (
 )
 from kb_agent.retrieval.search import rank_documents
 from kb_agent.runtime.run_state import persist_run_record
+from kb_agent.runtime.proposals import (
+    build_wiki_update_proposal,
+    persist_wiki_update_proposal,
+)
 from kb_agent.runtime.tracing import append_trace
 from kb_agent.storage.fixtures import load_markdown_corpus, load_query_fixture
 from kb_agent.storage.vault import (
@@ -124,6 +128,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--openai-model",
         default=None,
         help="Модель для --live-openai.",
+    )
+    parser.add_argument(
+        "--proposal-diff",
+        action="store_true",
+        help="Опционально создать proposal/diff для будущего обновления wiki без применения patch.",
     )
     return parser
 
@@ -497,6 +506,33 @@ def main(argv: list[str] | None = None, *, openai_client: Any | None = None) -> 
     answers_dir.mkdir(parents=True, exist_ok=True)
     answer_path = answers_dir / f"{run_record['run_id']}.md"
     answer_path.write_text(answer, encoding="utf-8")
+    proposal_paths: dict[str, Path] = {}
+    if args.proposal_diff:
+        proposal = build_wiki_update_proposal(
+            run_id=run_record["run_id"],
+            question=query_fixture["question"],
+            target_path=_select_wiki_proposal_target(
+                wiki_dir,
+                concept_documents=concept_hits,
+                run_id=run_record["run_id"],
+            ),
+            raw_documents=retrieved,
+        )
+        proposal_paths = persist_wiki_update_proposal(
+            settings.artifacts_dir,
+            proposal=proposal,
+        )
+        append_trace(
+            artifacts_dir=settings.artifacts_dir,
+            run_id=run_record["run_id"],
+            event={
+                "event": "wiki_update_proposal_written",
+                "proposal_path": str(proposal_paths["proposal"]),
+                "diff_path": str(proposal_paths["diff"]),
+                "target_path": proposal.target_path,
+                "applied": False,
+            },
+        )
     health_path = settings.artifacts_dir / "health" / f"{run_record['run_id']}.json"
     trace_path = settings.artifacts_dir / "traces" / f"{run_record['run_id']}.jsonl"
     summary_path = write_run_summary(
@@ -514,6 +550,8 @@ def main(argv: list[str] | None = None, *, openai_client: Any | None = None) -> 
             "trace": trace_path,
             "health": health_path,
             "openai_response": openai_metadata_path,
+            "wiki_update_proposal": proposal_paths.get("markdown"),
+            "wiki_update_diff": proposal_paths.get("diff"),
         },
     )
     write_vault_home(
@@ -601,6 +639,9 @@ def main(argv: list[str] | None = None, *, openai_client: Any | None = None) -> 
     print(f"tools: {tool_contracts_path}")
     print(f"trace: {settings.artifacts_dir / 'traces' / (run_record['run_id'] + '.jsonl')}")
     print(f"health: {health_path}")
+    if proposal_paths:
+        print(f"proposal: {proposal_paths['markdown']}")
+        print(f"proposal_diff: {proposal_paths['diff']}")
     if openai_metadata_path:
         print(f"openai_response: {openai_metadata_path}")
     return 0
@@ -649,6 +690,19 @@ def _merge_ranked_documents(*ranked_lists: list[dict], limit: int) -> list[dict]
             if len(merged) >= limit:
                 return merged
     return merged
+
+
+def _select_wiki_proposal_target(
+    wiki_dir: Path,
+    *,
+    concept_documents: list[dict],
+    run_id: str,
+) -> Path:
+    for document in concept_documents:
+        note_id = document.get("note_id", "")
+        if note_id.startswith("concepts/"):
+            return wiki_dir / f"{note_id}.md"
+    return wiki_dir / "questions" / f"{run_id}.md"
 
 
 if __name__ == "__main__":

@@ -180,15 +180,22 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 - enterprise auth/RBAC;
 - multi-agent orchestration;
 - автономная обратная запись;
+- optional «Живая Wiki» с применением изменений в устойчивый wiki-слой;
 - web crawling и внешние search/social API;
 - полноценный threat model на много страниц;
 - vector DB или OpenAI File Search как обязательный путь.
 
 Эти темы можно добавить как расширение, когда базовый срез уже стабильно проходит.
 
-## Расширение
+Если вы видите в материалах фразу «Живая Wiki», считайте её направлением для
+расширения, а не новым обязательным требованием к базовой сдаче M0-M3.
 
-Хорошее расширение после базового среза: контролируемая обратная запись.
+## Optional: «Живая Wiki»
+
+Это необязательное расширение после базового среза. Оно не добавляет требований к
+пакету сдачи M0-M3 и не заменяет локальный путь `raw -> wiki -> context -> answer`.
+
+Хорошая форма «Живой Wiki»: контролируемая обратная запись.
 
 Правильная форма:
 
@@ -197,3 +204,9 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 3. подтверждение сохраняется в состоянии запуска;
 4. приложение применяет patch;
 5. трейс показывает, кто и что разрешил.
+
+Безопасный первый шаг уже доступен как preview без применения patch:
+
+```bash
+uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --proposal-diff
+```

@@ -176,6 +176,40 @@ def default_tool_contracts() -> list[ToolContract]:
             timeout_seconds=5,
             idempotent=False,
         ),
+        ToolContract(
+            name="propose_wiki_update",
+            title="Предложить обновление wiki",
+            description="Подготовить proposal и diff-preview без применения patch к устойчивому wiki-слою.",
+            access="write",
+            input_schema=_object_schema(
+                {
+                    "run_id": {"type": "string"},
+                    "target_path": {
+                        "type": "string",
+                        "description": "Разрешённая wiki-страница, которую proposal предлагает обновить.",
+                    },
+                    "source_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Raw-источники, на которые опирается предложение.",
+                    },
+                },
+                required=["run_id", "target_path", "source_ids"],
+            ),
+            output_schema=_object_schema(
+                {
+                    "proposal_path": {"type": "string"},
+                    "diff_path": {"type": "string"},
+                    "applied": {"type": "boolean"},
+                },
+                required=["proposal_path", "diff_path", "applied"],
+            ),
+            model_safe=False,
+            requires_approval=False,
+            writes_to=["artifacts/proposals/"],
+            timeout_seconds=5,
+            idempotent=True,
+        ),
     ]
 
 

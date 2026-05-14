@@ -448,3 +448,50 @@ def test_live_openai_blocks_obvious_secrets_in_question(tmp_path, monkeypatch):
         raise AssertionError("live-путь OpenAI должен блокировать секреты в вопросе")
 
     assert not artifacts_dir.exists()
+
+
+def test_optional_proposal_diff_does_not_apply_to_wiki(tmp_path, monkeypatch):
+    root = Path(__file__).resolve().parents[1]
+    vault_root = tmp_path / "vault"
+    artifacts_dir = tmp_path / "artifacts"
+    shutil.copytree(root / "vault" / "raw", vault_root / "raw")
+    monkeypatch.setenv("ARTIFACTS_DIR", str(artifacts_dir))
+
+    exit_code = cli_main(
+        [
+            "--query-fixture",
+            str(root / "fixtures" / "queries" / "m2_query.json"),
+            "--vault-root",
+            str(vault_root),
+            "--proposal-diff",
+        ],
+    )
+
+    assert exit_code == 0
+    run_paths = list((artifacts_dir / "runs").glob("*.json"))
+    run_id = json.loads(run_paths[0].read_text(encoding="utf-8"))["run_id"]
+    proposal_json = artifacts_dir / "proposals" / f"{run_id}.json"
+    proposal_diff = artifacts_dir / "proposals" / f"{run_id}.diff"
+    proposal_markdown = artifacts_dir / "proposals" / f"{run_id}.md"
+    health_report = json.loads(
+        (artifacts_dir / "health" / f"{run_id}.json").read_text(encoding="utf-8")
+    )
+    trace_text = (artifacts_dir / "traces" / f"{run_id}.jsonl").read_text(
+        encoding="utf-8"
+    )
+
+    assert proposal_json.exists()
+    assert proposal_diff.exists()
+    assert proposal_markdown.exists()
+    assert health_report["status"] == "pass"
+    assert "wiki_update_proposal_written" in trace_text
+
+    payload = json.loads(proposal_json.read_text(encoding="utf-8"))
+    target_path = Path(payload["target_path"])
+    target_text = target_path.read_text(encoding="utf-8")
+
+    assert payload["status"] == "proposal_only_not_applied"
+    assert payload["applied"] is False
+    assert payload["source_ids"]
+    assert "Candidate update from run" in proposal_diff.read_text(encoding="utf-8")
+    assert "Candidate update from run" not in target_text
