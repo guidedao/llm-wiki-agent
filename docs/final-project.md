@@ -139,6 +139,8 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 6. откройте отчёт проверки состояния и eval-отчёт: оба должны иметь `status: pass`.
 
 Для короткой инженерной заметки можно использовать `docs/handoff-template.md`.
+Если вы застряли или не понимаете, что приложить к вопросу, откройте
+`docs/student-help.md`.
 
 ## Пакет сдачи
 

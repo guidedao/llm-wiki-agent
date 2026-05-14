@@ -196,6 +196,8 @@ Brave Search API и X API не нужны для базовых вех.
 - `docs/trust-boundaries.md` — где проходит граница доверия.
 - `docs/tool-contracts.md` — какие тулы только читают, а какие пишут.
 - `docs/runbook.md` — короткий маршрут диагностики одного запуска.
+- `docs/student-help.md` — что приложить к вопросу, куда смотреть по `run_id`
+  и что сдавать в LMS.
 - `docs/handoff-template.md` — шаблон инженерной заметки к сдаче или вопросу.
 - `docs/dependency-policy.md` — что входит в основной путь, а что остаётся расширением.
 - `AGENTS.md` — рабочий контракт для студента и кодинг-агента.
@@ -227,5 +229,5 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 сначала удалите из вывода всё, что похоже на ключ, токен или приватный URL.
 
 Подробный чеклист отладки лежит в `docs/troubleshooting.md`, лёгкий runbook —
-в `docs/runbook.md`, а карта расширений после базового среза — в
-`docs/roadmap.md`.
+в `docs/runbook.md`, быстрый student-help — в `docs/student-help.md`, а карта
+расширений после базового среза — в `docs/roadmap.md`.
