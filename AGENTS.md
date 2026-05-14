@@ -35,14 +35,14 @@
 ```bash
 uv sync --frozen --extra dev
 uv run pytest
-uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
+uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
 
 Опциональный live-путь:
 
 ```bash
-OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault --live-openai
+OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --live-openai
 ```
 
 В этом репозитории нет обязательных `just`-команд, веток или тегов для сдачи.

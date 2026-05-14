@@ -47,7 +47,7 @@ Obsidian — рекомендуемый человекочитаемый инт�
 1. Из корня репозитория выполните:
 
 ```bash
-uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
+uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault
 ```
 
 2. В Obsidian откройте:

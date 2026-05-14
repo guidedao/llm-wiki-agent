@@ -86,19 +86,18 @@ GPU-infrastructure.
 ```bash
 uv sync --frozen --extra dev
 uv run pytest
-uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
+uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
 
-Фикстура `fixtures/queries/m0_query.json` называется исторически: это стартовый
-запрос раннего слоя проекта. В текущем маршруте она используется и для проверки
-M2/M3, потому что поверх неё появляются план, пакет контекста, трейс, health и
+Фикстура `fixtures/queries/m2_query.json` — основной учебный запрос для текущего
+маршрута M2/M3: поверх него появляются план, пакет контекста, трейс, health и
 eval.
 
 Если есть `OPENAI_API_KEY`, дополнительно можно показать:
 
 ```bash
-OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault --live-openai
+OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --live-openai
 ```
 
 Live-запуск не обязателен для CI и не должен быть блокером, если у студента нет
@@ -165,7 +164,7 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 
 | Критерий | Баллы |
 | --- | ---: |
-| Рабочий ограниченный сценарий: тесты, локальный демо-запуск, eval-запуск, локальные фикстуры, путь `raw -> wiki -> context -> answer` | 20 |
+| Рабочий ограниченный сценарий: тесты, локальный учебный запуск, eval-запуск, локальные фикстуры, путь `raw -> wiki -> context -> answer` | 20 |
 | Ответ с опорой на источники: источники, provenance, отсутствие выдуманных ссылок, честный отказ или abstain в eval | 20 |
 | Проверяемость: план, запись запуска, JSONL-трейс, отчёт проверки состояния, сводка по `run_id` | 15 |
 | Дисциплина wiki: не смешаны raw-источники, wiki, схема, ретривал, артефакты запуска и устойчивый слой знаний | 15 |

@@ -29,7 +29,7 @@ ls README.md pyproject.toml
 ```bash
 uv sync --frozen --extra dev
 uv run pytest
-uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
+uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
 
@@ -38,7 +38,7 @@ uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 В чистом клоне есть только `vault/raw/`. Производные файлы появляются после:
 
 ```bash
-uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
+uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault
 ```
 
 После успешного запуска в выводе должен появиться `run_id` и пути к `context`,
@@ -68,7 +68,7 @@ Live-путь опционален. Он нужен только для фина
 Команда live-пути:
 
 ```bash
-OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault --live-openai
+OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --live-openai
 ```
 
 ## Health или eval вернули fail

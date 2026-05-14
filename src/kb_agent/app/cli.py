@@ -93,11 +93,11 @@ def build_concept_catalog(corpus: list[dict]) -> list[dict]:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="kb-agent",
-        description="Запустить локальное демо агента базы знаний Guidedao.",
+        description="Запустить локальный учебный путь агента базы знаний Guidedao.",
     )
     parser.add_argument(
         "--query-fixture",
-        default="fixtures/queries/m0_query.json",
+        default="fixtures/queries/m2_query.json",
         help="Путь к JSON-файлу с фикстурой вопроса.",
     )
     parser.add_argument(
@@ -626,7 +626,7 @@ def _reject_dangerous_output_root(path: Path, *, label: str) -> None:
     resolved = path.expanduser().resolve()
     forbidden = {Path("/").resolve(), Path.home().resolve()}
     if resolved in forbidden:
-        raise RuntimeError(f"{label} указывает на {resolved}; это слишком широкая область для демо-запуска.")
+        raise RuntimeError(f"{label} указывает на {resolved}; это слишком широкая область для учебного запуска.")
 
 
 def _merge_ranked_documents(*ranked_lists: list[dict], limit: int) -> list[dict]:

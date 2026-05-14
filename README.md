@@ -66,30 +66,30 @@ CoreWeave или других компаний.
 cd llm-wiki-agent
 uv sync --frozen --extra dev
 uv run pytest
-uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault
+uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
 
-Локальный демо-запуск работает без API-ключа. Это детерминированный режим на
+Локальный учебный запуск работает без API-ключа. Это детерминированный режим на
 фикстурах для тестов, CI, офлайн-работы и сравнения.
 
-Фикстура `fixtures/queries/m0_query.json` называется исторически: это стартовый
-запрос раннего слоя проекта. Для промежуточной проверки M2 достаточно тестов и
-`kb-agent`; для финальной сдачи M3 дополнительно запускайте `kb-eval`.
+Фикстура `fixtures/queries/m2_query.json` — основной учебный запрос для текущего
+маршрута M2/M3. Старый `m0_query.json` оставлен только для совместимости ранних
+заметок и тестов.
 
 | Команда | Что делает | Когда запускать | Успешный результат |
 | --- | --- | --- | --- |
 | `uv sync --frozen --extra dev` | ставит зависимости через `uv` | один раз после клонирования | зависимости установлены без ошибок |
 | `uv run pytest` | запускает тесты проекта | перед сдачей и после правок | `passed` в выводе pytest |
-| `uv run kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault` | собирает локальный wiki-путь без API-ключа | чтобы увидеть артефакты запуска и проверить M2/M3 | появился `run_id`, ответ, сводка и отчёт проверки состояния |
+| `uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault` | собирает локальный wiki-путь без API-ключа | чтобы увидеть артефакты запуска и проверить M2/M3 | появился `run_id`, ответ, сводка и отчёт проверки состояния |
 | `uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault` | запускает маленький eval-набор | для финальной сдачи M3 | `status: pass`, `summary.passed_count == summary.case_count` |
 | `rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md` | сбрасывает только производные файлы | если нужно начать локальный прогон заново | остаётся только исходный `vault/raw/` |
-| `OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault --live-openai` | делает финальный ответ через OpenAI Responses API | опционально, если есть ключ | появился `artifacts/responses/<run_id>.json` |
+| `OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --live-openai` | делает финальный ответ через OpenAI Responses API | опционально, если есть ключ | появился `artifacts/responses/<run_id>.json` |
 
 Live-запуск:
 
 ```bash
-OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m0_query.json --vault-root vault --live-openai
+OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --live-openai
 ```
 
 Live-запуск проходит тот же путь, но финальный Markdown-ответ собирается через
