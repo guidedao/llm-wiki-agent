@@ -69,8 +69,10 @@ live-путь получает только выбранный пакет кон
 
 ## Опциональный live-путь OpenAI
 
-Live-команда отправляет в OpenAI Responses API только выбранный вопрос,
-wiki-контекст и исходное основание, которые уже попали в пакет контекста.
+Live-команда отправляет в
+<a href="https://developers.openai.com/api/reference/responses/overview" target="_blank" rel="noopener noreferrer">OpenAI Responses API</a>
+только выбранный вопрос, wiki-контекст и исходное основание, которые уже попали
+в пакет контекста.
 
 Live-путь не даёт модели:
 

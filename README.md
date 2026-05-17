@@ -19,7 +19,7 @@ GPU-capacity для обучения и инференса, спорит о rese
 производный wiki-слой и схема с правилами поддержки.
 
 Проект вдохновлён идеей Андрея Карпатого про
-[LLM Knowledge Bases](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f),
+<a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener noreferrer">LLM Knowledge Bases</a>,
 но не пытается копировать чужой рабочий процесс. Для курса важнее инженерный путь:
 контекст, тулзы, трейс, состояние запуска, проверка состояния, схема и границы
 доверия.
@@ -86,6 +86,10 @@ uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 и `vault/log.md` могут отсутствовать. Они появляются после первого успешного
 `kb-agent`.
 
+После `kb-agent` скопируйте `run_id` из вывода команды. Это идентификатор
+именно агентного запуска. Не путайте его с `eval_run_id`, который появляется
+только после `kb-eval` и относится к проверочному прогону.
+
 | Команда | Что делает | Когда запускать | Успешный результат |
 | --- | --- | --- | --- |
 | `uv sync --frozen --extra dev` | ставит зависимости через `uv` | один раз после клонирования | зависимости установлены без ошибок |
@@ -104,6 +108,9 @@ OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queri
 Live-запуск проходит тот же путь, но финальный Markdown-ответ собирается через
 OpenAI Responses API. Модель получает только выбранный вопрос, wiki-контекст и
 исходное основание. Она не получает права менять `vault/raw/` или `vault/wiki/`.
+
+Официальный первоисточник:
+<a href="https://developers.openai.com/api/reference/responses/overview" target="_blank" rel="noopener noreferrer">OpenAI Responses API</a>.
 
 ## Что Создаёт Запуск
 

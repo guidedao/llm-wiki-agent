@@ -16,7 +16,7 @@
 
 Основной live-путь с LLM, видимый студенту, должен использовать:
 
-- OpenAI Responses API
+- <a href="https://developers.openai.com/api/reference/responses/overview" target="_blank" rel="noopener noreferrer">OpenAI Responses API</a>
 - `OPENAI_API_KEY`
 - зависимость `openai` через `uv run --extra openai`
 

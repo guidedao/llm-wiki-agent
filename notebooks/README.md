@@ -3,10 +3,7 @@
 Этот каталог предназначен для коротких запускаемых примеров к урокам курса.
 Ноутбуки хранятся в публичном GitHub-репозитории, а Colab открывает их по
 ссылке вида:
-
-```text
-https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/01_context_packet.ipynb
-```
+<a href="https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/01_context_packet.ipynb" target="_blank" rel="noopener noreferrer">01_context_packet.ipynb в Colab</a>.
 
 Такой способ лучше, чем хранить канонические ноутбуки в Google Drive:
 
