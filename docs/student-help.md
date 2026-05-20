@@ -39,6 +39,9 @@
 Если вы не можете связать ответ, контекст, трейс и health одним `run_id`,
 сначала не чините код: восстановите карту артефактов.
 
+В context JSON полезнее всего смотреть `plan_step_context[].selected_raw_documents`
+и `raw_documents`: там видно, какие raw-источники попали в основание ответа.
+
 ## Частые ситуации
 
 **Команда не видит проект.**  
@@ -86,10 +89,12 @@ Live-путь нужен только если у вас есть `OPENAI_API_KE
 3. один проверенный `run_id`;
 4. сводка `vault/outputs/<run_id>-summary.md`;
 5. итоговый ответ `vault/outputs/<run_id>.md`;
-6. `artifacts/context/<run_id>.json`;
-7. `artifacts/health/<run_id>.json`;
-8. `artifacts/tools/<run_id>.json`;
-9. eval-отчёт со статусом `pass`;
-10. короткая заметка по `docs/handoff-template.md`.
+6. `artifacts/runs/<run_id>.json`;
+7. `artifacts/plans/<run_id>.json`;
+8. `artifacts/context/<run_id>.json`;
+9. `artifacts/health/<run_id>.json`;
+10. `artifacts/tools/<run_id>.json`;
+11. eval-отчёт со статусом `pass`;
+12. короткая заметка по `docs/handoff-template.md`.
 
 Весь репозиторий как простыню в LMS прикладывать не нужно.

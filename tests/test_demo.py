@@ -295,10 +295,13 @@ def test_health_report_checks_core_run_artifacts(tmp_path):
 
     report = build_health_report(artifacts_dir, run_id)
     report_path = persist_health_report(artifacts_dir, report)
+    run_record = json.loads((artifacts_dir / "runs" / f"{run_id}.json").read_text(encoding="utf-8"))
 
     assert report["status"] == "pass"
     assert report["summary"]["failed_count"] == 0
     assert report_path.exists()
+    assert run_record["current_step"] == "done"
+    assert run_record["budget"]["budget_file"] == "run_budget.yaml"
 
 
 def test_cli_live_openai_path_is_e2e_testable_without_api_key(tmp_path, monkeypatch):

@@ -21,6 +21,8 @@ def persist_run_record(
     terminal_reason: str | None = None,
     answer_source: str | None = None,
     openai_response_metadata_path: Path | None = None,
+    current_step: str | None = None,
+    budget: dict | None = None,
 ) -> dict:
     run_id = run_id or str(uuid4())
     runs_dir = artifacts_dir / "runs"
@@ -33,10 +35,24 @@ def persist_run_record(
         "run_id": run_id,
         "task_title": task_title,
         "stage": stage,
+        "current_step": current_step or ("done" if stage == "completed" else stage),
         "status": "completed" if stage == "completed" else "running",
         "created_at": previous.get("created_at", utc_now_iso()),
         "updated_at": utc_now_iso(),
         "terminal_reason": terminal_reason,
+        "budget": budget
+        or previous.get("budget")
+        or {
+            "budget_file": "run_budget.yaml",
+            "stages": [
+                "corpus_boot",
+                "retrieval",
+                "planning",
+                "answer_fixture",
+                "answer_live",
+                "health",
+            ],
+        },
         "answer_path": str(answer_path) if answer_path else None,
         "wiki_path": str(wiki_path) if wiki_path else None,
         "summary_path": str(summary_path) if summary_path else previous.get("summary_path"),

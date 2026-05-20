@@ -152,12 +152,14 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 3. один `run_id`, который вы проверяли руками;
 4. `vault/outputs/<run_id>-summary.md`;
 5. `vault/outputs/<run_id>.md`;
-6. `artifacts/context/<run_id>.json`;
-7. `artifacts/tools/<run_id>.json`;
-8. `artifacts/health/<run_id>.json`;
-9. последние строки `artifacts/traces/<run_id>.jsonl`;
-10. eval-отчёт из `artifacts/evals/`;
-11. короткая заметка по шаблону `docs/handoff-template.md`.
+6. `artifacts/runs/<run_id>.json`;
+7. `artifacts/plans/<run_id>.json`;
+8. `artifacts/context/<run_id>.json`;
+9. `artifacts/tools/<run_id>.json`;
+10. `artifacts/health/<run_id>.json`;
+11. последние строки `artifacts/traces/<run_id>.jsonl`;
+12. eval-отчёт из `artifacts/evals/`;
+13. короткая заметка по шаблону `docs/handoff-template.md`.
 
 Если live-путь через OpenAI Responses API не запускался, просто напишите это в
 заметке. Базовая сдача не должна зависеть от наличия API-ключа.
