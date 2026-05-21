@@ -92,9 +92,10 @@ Live-путь нужен только если у вас есть `OPENAI_API_KE
 6. `artifacts/runs/<run_id>.json`;
 7. `artifacts/plans/<run_id>.json`;
 8. `artifacts/context/<run_id>.json`;
-9. `artifacts/health/<run_id>.json`;
-10. `artifacts/tools/<run_id>.json`;
-11. eval-отчёт со статусом `pass`;
-12. короткая заметка по `docs/handoff-template.md`.
+9. `artifacts/traces/<run_id>.jsonl`;
+10. `artifacts/health/<run_id>.json`;
+11. `artifacts/tools/<run_id>.json`;
+12. eval-отчёт со статусом `pass`;
+13. короткая заметка по `docs/handoff-template.md`.
 
 Весь репозиторий как простыню в LMS прикладывать не нужно.
