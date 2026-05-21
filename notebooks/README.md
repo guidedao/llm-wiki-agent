@@ -35,11 +35,11 @@ Google-аккаунт владельца для Drive здесь не крити
 
 Ссылки заработают после публикации этих файлов в `main` публичного репозитория.
 
-* [01_context_packet.ipynb](https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/01_context_packet.ipynb)
-* [02_context_surfaces.ipynb](https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/02_context_surfaces.ipynb)
-* [03_context_budget.ipynb](https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/03_context_budget.ipynb)
-* [04_context_builder.ipynb](https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/04_context_builder.ipynb)
-* [05_responses_api_context_call.ipynb](https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/05_responses_api_context_call.ipynb)
+* <a href="https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/01_context_packet.ipynb" target="_blank" rel="noopener noreferrer">01_context_packet.ipynb</a>
+* <a href="https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/02_context_surfaces.ipynb" target="_blank" rel="noopener noreferrer">02_context_surfaces.ipynb</a>
+* <a href="https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/03_context_budget.ipynb" target="_blank" rel="noopener noreferrer">03_context_budget.ipynb</a>
+* <a href="https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/04_context_builder.ipynb" target="_blank" rel="noopener noreferrer">04_context_builder.ipynb</a>
+* <a href="https://colab.research.google.com/github/guidedao/llm-wiki-agent/blob/main/notebooks/05_responses_api_context_call.ipynb" target="_blank" rel="noopener noreferrer">05_responses_api_context_call.ipynb</a>
 
 ## Редакторское правило
 

@@ -19,11 +19,11 @@ Obsidian — рекомендуемый человекочитаемый инт�
 
 Используйте официальную страницу загрузки:
 
-- [Скачать Obsidian](https://obsidian.md/download)
+- <a href="https://obsidian.md/download" target="_blank" rel="noopener noreferrer">Скачать Obsidian</a>
 
 Официальная справка по vault:
 
-- [Obsidian Help: Vault](https://obsidian.md/help/vault)
+- <a href="https://obsidian.md/help/vault" target="_blank" rel="noopener noreferrer">Obsidian Help: Vault</a>
 
 ## Открыть Vault
 
