@@ -82,19 +82,16 @@ uv --version
 cd llm-wiki-agent
 uv sync --frozen --extra dev
 uv run pytest
-uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault
+uv run kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
 
 Локальный учебный запуск работает без API-ключа. Это детерминированный режим на
 фикстурах для тестов, CI, офлайн-работы и сравнения.
 
-Фикстура `fixtures/queries/m2_query.json` — основной учебный запрос для текущих
-этапов проекта M2/M3. Старый `m0_query.json` оставлен только для совместимости
-ранних заметок и тестов.
-
-`M` в названиях `M0`, `M1`, `M2` и `M3` означает учебную веху: это этапы
-проекта, а не git-теги, ветки или скрытые стартовые точки.
+Фикстура `fixtures/queries/project_query.json` — основной учебный запрос для
+проектного маршрута. `starter_query.json` оставлен как маленькая совместимая
+фикстура для тестов, но студенту в LMS обычно нужен именно `project_query.json`.
 
 В чистом клоне `artifacts/`, `vault/wiki/`, `vault/outputs/`, `vault/index.md`
 и `vault/log.md` могут отсутствовать. Они появляются после первого успешного
@@ -108,15 +105,15 @@ uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 | --- | --- | --- | --- |
 | `uv sync --frozen --extra dev` | ставит зависимости через `uv` | один раз после клонирования | зависимости установлены без ошибок |
 | `uv run pytest` | запускает тесты проекта | перед сдачей и после правок | `passed` в выводе pytest |
-| `uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault` | собирает локальный wiki-путь без API-ключа | чтобы увидеть артефакты запуска и проверить, что этапы M2/M3 отработали | появился `run_id`, ответ, сводка и отчёт проверки состояния |
-| `uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault` | запускает маленький eval-набор | для финальной сдачи майлстоуна M3 | `status: pass`, `summary.passed_count == summary.case_count` |
+| `uv run kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault` | собирает локальный wiki-путь без API-ключа | чтобы увидеть артефакты запуска | появился `run_id`, ответ, сводка и отчёт проверки состояния |
+| `uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault` | запускает маленький eval-набор | перед финальной сдачей | `status: pass`, `summary.passed_count == summary.case_count` |
 | `rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md` | сбрасывает только производные файлы | если нужно начать локальный прогон заново | остаётся только исходный `vault/raw/` |
-| `OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --live-openai` | делает финальный ответ через OpenAI Responses API | опционально, если есть ключ | появился `artifacts/responses/<run_id>.json` |
+| `OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault --live-openai` | делает финальный ответ через OpenAI Responses API | опционально, если есть ключ | появился `artifacts/responses/<run_id>.json` |
 
 Live-запуск:
 
 ```bash
-OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --live-openai
+OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault --live-openai
 ```
 
 Live-запуск проходит тот же путь, но финальный Markdown-ответ собирается через
@@ -173,8 +170,7 @@ OpenAI Responses API. Модель получает только выбранн�
 
 ## Что Сейчас Реализовано
 
-Текущий каркас покрывает базовую часть проекта `M0 + M1 + M2 + M3` на корпусе
-Northstar Compute:
+Текущий каркас покрывает базовый проектный маршрут на корпусе Northstar Compute:
 
 - сбор wiki-слоя из локального корпуса;
 - явное разделение трёх слоёв: raw-источники, wiki и схема;
@@ -192,12 +188,11 @@ Northstar Compute:
 тулов, трейсы, границы чтения/записи и handoff-заметку. Это учебная версия кода
 вокруг агента, а не курс по одному фреймворку.
 
-В базовом LMS-сценарии отдельного майлстоуна `M4` нет: финальная сдача строится
-вокруг чтения одного `run_id`, артефактов этапов `M2/M3`, eval-отчёта и короткой
-инженерной заметки.
+В базовом LMS-сценарии финальная сдача строится вокруг чтения одного `run_id`,
+артефактов запуска, eval-отчёта и короткой инженерной заметки.
 
 Опциональная «Живая Wiki» относится к расширениям после базовой сдачи: это не
-дополнительный обязательный майлстоун и не условие прохождения майлстоуна M3.
+дополнительное обязательное условие прохождения кэпстоун-проекта.
 
 Проект остаётся системой, которая сначала учится безопасно читать. Запись в
 устойчивый слой знаний появится только в отдельном расширении через предложение
@@ -216,13 +211,14 @@ Live-путь:
 - зависимость `openai`, которую live-команда подтягивает через
   `uv run --extra openai`
 
-Brave Search API и X API не нужны для базовых вех.
+Brave Search API и X API не нужны для базового маршрута.
 
 ## Как Читать Проект
 
 - `vault/` — человекочитаемый слой знаний, ответы и сводки запусков.
 - `artifacts/` — доказательства конкретного запуска.
-- `docs/milestones/` — цель и критерии приёмки каждой вехи.
+- `docs/projects/README.md` — короткая карта проектного маршрута без внутренних
+  меток и скрытых стартовых точек.
 - `docs/final-project.md` — бриф, критерии приёмки и рубрика кэпстоун-проекта.
 - `docs/company-lore.md` — учебный мир Northstar Compute и границы лора.
 - `docs/wiki-schema.md` — схема wiki и правила поддержки живой базы знаний.

@@ -51,9 +51,9 @@ class FakeClient:
         self.responses = FakeResponses()
 
 
-def test_m2_query_builds_grounded_answer():
+def test_project_query_builds_grounded_answer():
     root = Path(__file__).resolve().parents[1]
-    query = load_query_fixture(root / "fixtures" / "queries" / "m2_query.json")
+    query = load_query_fixture(root / "fixtures" / "queries" / "project_query.json")
     corpus = load_markdown_corpus(root / "vault" / "raw")
     retrieved = search_documents(query["question"], corpus)
     answer = build_grounded_answer(query, retrieved)
@@ -75,16 +75,16 @@ def test_corpus_loads_and_compiles_overview():
 
 def test_query_fixture_loader_reads_json():
     fixture_path = (
-        Path(__file__).resolve().parents[1] / "fixtures" / "queries" / "m2_query.json"
+        Path(__file__).resolve().parents[1] / "fixtures" / "queries" / "project_query.json"
     )
     query = load_query_fixture(fixture_path)
     assert "question" in query
 
 
-def test_legacy_m0_query_stays_compatible_with_m2_query():
+def test_starter_query_stays_compatible_with_project_query():
     root = Path(__file__).resolve().parents[1]
-    legacy_query = load_query_fixture(root / "fixtures" / "queries" / "m0_query.json")
-    current_query = load_query_fixture(root / "fixtures" / "queries" / "m2_query.json")
+    legacy_query = load_query_fixture(root / "fixtures" / "queries" / "starter_query.json")
+    current_query = load_query_fixture(root / "fixtures" / "queries" / "project_query.json")
     assert legacy_query == current_query
 
 
@@ -317,7 +317,7 @@ def test_cli_live_openai_path_is_e2e_testable_without_api_key(tmp_path, monkeypa
     exit_code = cli_main(
         [
             "--query-fixture",
-            str(root / "fixtures" / "queries" / "m2_query.json"),
+            str(root / "fixtures" / "queries" / "project_query.json"),
             "--vault-root",
             str(vault_root),
             "--live-openai",
@@ -463,7 +463,7 @@ def test_optional_proposal_diff_does_not_apply_to_wiki(tmp_path, monkeypatch):
     exit_code = cli_main(
         [
             "--query-fixture",
-            str(root / "fixtures" / "queries" / "m2_query.json"),
+            str(root / "fixtures" / "queries" / "project_query.json"),
             "--vault-root",
             str(vault_root),
             "--proposal-diff",

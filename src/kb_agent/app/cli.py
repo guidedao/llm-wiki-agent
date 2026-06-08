@@ -101,7 +101,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--query-fixture",
-        default="fixtures/queries/m2_query.json",
+        default="fixtures/queries/project_query.json",
         help="Путь к JSON-файлу с фикстурой вопроса.",
     )
     parser.add_argument(

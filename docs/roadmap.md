@@ -9,7 +9,7 @@
 ## Optional A: «Живая Wiki» через контролируемую обратную запись
 
 Это расширение не требуется для базовой сдачи. Беритесь за него только после
-того, как майлстоуны M0-M3 стабильно проходят локально и eval имеет `status: pass`.
+того, как локальный проектный маршрут стабильно проходит и eval имеет `status: pass`.
 
 Агент не пишет в wiki молча. Правильный путь:
 
@@ -23,7 +23,7 @@
 patch:
 
 ```bash
-uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --proposal-diff
+uv run kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault --proposal-diff
 ```
 
 Эта команда создаёт `artifacts/proposals/<run_id>.md` и

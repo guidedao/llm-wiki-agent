@@ -68,7 +68,7 @@ uv sync --frozen --extra dev
 
 ```bash
 uv run pytest
-uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault
+uv run kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
 
@@ -76,9 +76,10 @@ Live-путь нужен только если у вас есть `OPENAI_API_KE
 финальный ответ через Responses API.
 
 **Нужно ли делать optional «Живую Wiki»?**  
-Нет. Для базовой сдачи достаточно локального пути по майлстоунам M0-M3: тесты, `kb-agent`, `kb-eval`
-и один читаемый `run_id`. «Живая Wiki» — это расширение после базового среза,
-если вы уже всё сдали и хотите показать контролируемое предложение изменений.
+Нет. Для базовой сдачи достаточно локального проектного маршрута: тесты,
+`kb-agent`, `kb-eval` и один читаемый `run_id`. «Живая Wiki» — это расширение
+после базового среза, если вы уже всё сдали и хотите показать контролируемое
+предложение изменений.
 
 ## Что сдавать в LMS
 

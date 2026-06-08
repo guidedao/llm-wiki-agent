@@ -27,9 +27,9 @@ GPU-infrastructure.
 5. каждый запуск оставляет `run_id`, трейс, пакет контекста, отчёт проверки состояния и
    сводку.
 
-Базовая сдача курса заканчивается срезом майлстоунов `M0-M3`. Отдельный
-майлстоун `M4` не нужен: финальный результат проверяется по одному читаемому
-запуску, eval-отчёту и короткой инженерной заметке.
+Базовая сдача курса заканчивается одним понятным проектным маршрутом. Финальный
+результат проверяется по одному читаемому запуску, eval-отчёту и короткой
+инженерной заметке.
 
 Важно: это не симулятор «разбери всю компанию навсегда». Учебный корпус
 маленький и заранее подготовленный. В нём есть ровно столько напряжения, чтобы
@@ -76,28 +76,23 @@ GPU-infrastructure.
 
 ## Что нужно сдать
 
-Если вы показываете промежуточный срез майлстоуна M2, достаточно тестов и
-`kb-agent`: eval ещё не является частью этого майлстоуна. Для финальной сдачи
-майлстоуна M3 добавьте `kb-eval`, потому что майлстоун M3 проверяет уже не
-только ответ, но и управляемость запуска.
-
 Перед финальной сдачей должны проходить:
 
 ```bash
 uv sync --frozen --extra dev
 uv run pytest
-uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault
+uv run kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault
 uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 ```
 
-Фикстура `fixtures/queries/m2_query.json` — основной учебный запрос для текущего
-маршрута майлстоунов M2/M3: поверх него появляются план, пакет контекста,
-трейс, health и eval.
+Фикстура `fixtures/queries/project_query.json` — основной учебный запрос
+кэпстоун-проекта: поверх него появляются план, пакет контекста, трейс, health и
+eval.
 
 Если есть `OPENAI_API_KEY`, дополнительно можно показать:
 
 ```bash
-OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --live-openai
+OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault --live-openai
 ```
 
 Live-запуск не обязателен для CI и не должен быть блокером, если у студента нет
@@ -187,16 +182,16 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 - полноценный threat model на много страниц;
 - vector DB или OpenAI File Search как обязательный путь.
 
-Эти темы можно добавить как расширение, когда базовый срез уже стабильно проходит.
+Эти темы можно добавить как расширение, когда базовый маршрут уже стабильно
+проходит.
 
 Если вы видите в материалах фразу «Живая Wiki», считайте её направлением для
-расширения, а не новым обязательным требованием к базовой сдаче майлстоунов M0-M3.
+расширения, а не новым обязательным требованием к базовой сдаче.
 
 ## Optional: «Живая Wiki»
 
 Это необязательное расширение после базового среза. Оно не добавляет требований
-к пакету сдачи майлстоунов M0-M3 и не заменяет локальный путь
-`raw -> wiki -> context -> answer`.
+к пакету сдачи и не заменяет локальный путь `raw -> wiki -> context -> answer`.
 
 Хорошая форма «Живой Wiki»: контролируемая обратная запись.
 
@@ -211,5 +206,5 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 Безопасный первый шаг уже доступен как preview без применения patch:
 
 ```bash
-uv run kb-agent --query-fixture fixtures/queries/m2_query.json --vault-root vault --proposal-diff
+uv run kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault --proposal-diff
 ```
