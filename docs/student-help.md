@@ -90,13 +90,12 @@ Live-путь нужен только если у вас есть `OPENAI_API_KE
 3. один проверенный `run_id`;
 4. сводка `vault/outputs/<run_id>-summary.md`;
 5. итоговый ответ `vault/outputs/<run_id>.md`;
-6. `artifacts/runs/<run_id>.json`;
-7. `artifacts/plans/<run_id>.json`;
-8. `artifacts/context/<run_id>.json`;
-9. `artifacts/traces/<run_id>.jsonl`;
-10. `artifacts/health/<run_id>.json`;
-11. `artifacts/tools/<run_id>.json`;
-12. eval-отчёт со статусом `pass`;
-13. короткая заметка по `docs/handoff-template.md`.
+6. `artifacts/health/<run_id>.json`;
+7. eval-отчёт со статусом `pass`;
+8. короткая заметка по `docs/handoff-template.md`.
+
+Если преподаватель или ревьюер попросит детали, открывайте их по тому же
+`run_id`: `artifacts/runs/`, `artifacts/plans/`, `artifacts/context/`,
+`artifacts/tools/` и последние строки `artifacts/traces/<run_id>.jsonl`.
 
 Весь репозиторий как простыню в LMS прикладывать не нужно.

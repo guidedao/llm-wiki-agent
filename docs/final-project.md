@@ -74,6 +74,14 @@ GPU-infrastructure.
 инженерный контур: исходное основание, wiki-страницы, пакет контекста, ответ с
 опорой на источники, трейс, отчёт проверки состояния и eval.
 
+Основная сдача строится вокруг одного проверенного запуска. Остальные вопросы
+ниже нужны как ориентиры: их можно прогонять через `--question`, когда базовый
+маршрут уже проходит.
+
+```bash
+uv run kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault --question "Что случилось в Aurora-17?"
+```
+
 ## Что нужно сдать
 
 Перед финальной сдачей должны проходить:
@@ -147,14 +155,14 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 3. один `run_id`, который вы проверяли руками;
 4. `vault/outputs/<run_id>-summary.md`;
 5. `vault/outputs/<run_id>.md`;
-6. `artifacts/runs/<run_id>.json`;
-7. `artifacts/plans/<run_id>.json`;
-8. `artifacts/context/<run_id>.json`;
-9. `artifacts/tools/<run_id>.json`;
-10. `artifacts/health/<run_id>.json`;
-11. последние строки `artifacts/traces/<run_id>.jsonl`;
-12. eval-отчёт из `artifacts/evals/`;
-13. короткая заметка по шаблону `docs/handoff-template.md`.
+6. `artifacts/health/<run_id>.json`;
+7. eval-отчёт из `artifacts/evals/`;
+8. короткая заметка по шаблону `docs/handoff-template.md`.
+
+Остальные JSON-артефакты не нужно копировать простынёй. Достаточно сослаться на
+них из сводки или заметки: `artifacts/runs/`, `artifacts/plans/`,
+`artifacts/context/`, `artifacts/tools/` и последние строки
+`artifacts/traces/<run_id>.jsonl`.
 
 Если live-путь через OpenAI Responses API не запускался, просто напишите это в
 заметке. Базовая сдача не должна зависеть от наличия API-ключа.
@@ -168,7 +176,7 @@ rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md
 | Проверяемость: план, запись запуска, JSONL-трейс, отчёт проверки состояния, сводка по `run_id` | 15 |
 | Дисциплина wiki: не смешаны raw-источники, wiki, схема, ретривал, артефакты запуска и устойчивый слой знаний | 15 |
 | Границы безопасности: разделение чтения и записи, нет автономной обратной записи, live-путь не пишет в `vault/raw/` или `vault/wiki/` | 10 |
-| Мини-evals: 3-5 сценариев, включая недостаточный контекст, конфликт или вопрос по capacity/pricing/incident | 10 |
+| Retrieval/grounding smoke eval: 3-5 сценариев, включая недостаточный контекст и вопросы по capacity/pricing/incident | 10 |
 | Короткая инженерная заметка: что сделано, что вне объёма, как диагностировать один запуск, какой `run_id` проверялся | 10 |
 
 ## Что не нужно для базового среза
