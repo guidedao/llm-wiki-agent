@@ -92,7 +92,8 @@ Live-путь нужен только если у вас есть `OPENAI_API_KE
 5. итоговый ответ `vault/outputs/<run_id>.md`;
 6. `artifacts/health/<run_id>.json`;
 7. eval-отчёт со статусом `pass`;
-8. короткая заметка по `docs/handoff-template.md`.
+8. короткая заметка по `docs/handoff-template.md`, включая 2-3 строки про
+   границы доверия.
 
 Если преподаватель или ревьюер попросит детали, открывайте их по тому же
 `run_id`: `artifacts/runs/`, `artifacts/plans/`, `artifacts/context/`,

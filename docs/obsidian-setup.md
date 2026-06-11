@@ -25,7 +25,7 @@ Obsidian — рекомендуемый человекочитаемый инт�
 
 - <a href="https://obsidian.md/help/vault" target="_blank" rel="noopener noreferrer">Obsidian Help: Vault</a>
 
-## Открыть Vault
+## Открыть vault
 
 1. Установите Obsidian.
 2. Выберите `Open folder as vault`.
@@ -42,7 +42,7 @@ Obsidian — рекомендуемый человекочитаемый инт�
 - `wiki/` со скомпилированными страницами знаний;
 - `outputs/` с ответами и сводками запусков.
 
-## Первый Рекомендуемый Запуск
+## Первый рекомендуемый запуск
 
 1. Из корня репозитория выполните:
 
@@ -65,7 +65,7 @@ uv run kb-agent --query-fixture fixtures/queries/project_query.json --vault-root
 - ответ, привязанный к источникам;
 - всё это в одном vault.
 
-## Граница Объёма
+## Граница объёма
 
 В этом кэпстоун-проекте Obsidian — только интерфейс для просмотра `vault/`.
 
