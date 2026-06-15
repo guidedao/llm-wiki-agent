@@ -29,6 +29,7 @@ from kb_agent.runtime.proposals import (
     build_wiki_update_proposal,
     persist_wiki_update_proposal,
 )
+from kb_agent.runtime.source_map import build_source_map, persist_source_map
 from kb_agent.runtime.tracing import append_trace
 from kb_agent.storage.fixtures import load_markdown_corpus, load_query_fixture
 from kb_agent.storage.vault import (
@@ -506,6 +507,26 @@ def main(argv: list[str] | None = None, *, openai_client: Any | None = None) -> 
     answers_dir.mkdir(parents=True, exist_ok=True)
     answer_path = answers_dir / f"{run_record['run_id']}.md"
     answer_path.write_text(answer, encoding="utf-8")
+    selected_wiki_documents = ([wiki_index] if wiki_index else []) + concept_hits + source_hits
+    source_map = build_source_map(
+        run_id=run_record["run_id"],
+        question=query_fixture["question"],
+        answer_path=answer_path,
+        context_path=context_packet_path,
+        wiki_documents=selected_wiki_documents,
+        raw_documents=retrieved,
+        decision_ladder=decision_ladder,
+    )
+    source_map_path = persist_source_map(settings.artifacts_dir, source_map)
+    append_trace(
+        artifacts_dir=settings.artifacts_dir,
+        run_id=run_record["run_id"],
+        event={
+            "event": "source_map_written",
+            "source_map_path": str(source_map_path),
+            "evidence_count": len(source_map["evidence"]),
+        },
+    )
     proposal_paths: dict[str, Path] = {}
     if args.proposal_diff:
         proposal = build_wiki_update_proposal(
@@ -546,6 +567,7 @@ def main(argv: list[str] | None = None, *, openai_client: Any | None = None) -> 
         artifact_paths={
             "plan": plan_path,
             "context": context_packet_path,
+            "source-map": source_map_path,
             "tools": tool_contracts_path,
             "trace": trace_path,
             "health": health_path,
@@ -636,6 +658,7 @@ def main(argv: list[str] | None = None, *, openai_client: Any | None = None) -> 
     print(f"answer: {answer_path}")
     print(f"summary: {summary_path}")
     print(f"context: {context_packet_path}")
+    print(f"source-map: {source_map_path}")
     print(f"tools: {tool_contracts_path}")
     print(f"trace: {settings.artifacts_dir / 'traces' / (run_record['run_id'] + '.jsonl')}")
     print(f"health: {health_path}")

@@ -22,6 +22,7 @@ uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 
 - Сводка запуска:
 - Ответ:
+- Source-map:
 - Пакет контекста:
 - Трейс:
 - Отчёт проверки состояния:

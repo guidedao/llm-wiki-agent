@@ -12,6 +12,7 @@ REQUIRED_TRACE_EVENTS = [
     "plan_created",
     "plan_context_selected",
     "context_packet_written",
+    "source_map_written",
     "answer_written",
     "run_summary_written",
     "plan_completed",
@@ -41,6 +42,7 @@ def build_health_report(artifacts_dir: Path, run_id: str) -> dict:
     trace_path = artifacts_dir / "traces" / f"{run_id}.jsonl"
     plan_path = artifacts_dir / "plans" / f"{run_id}.json"
     context_path = artifacts_dir / "context" / f"{run_id}.json"
+    source_map_path = artifacts_dir / "source-map" / f"{run_id}.json"
     tools_path = artifacts_dir / "tools" / f"{run_id}.json"
 
     run_record = (
@@ -69,6 +71,7 @@ def build_health_report(artifacts_dir: Path, run_id: str) -> dict:
         ),
         _check("plan_artifact_exists", plan_path.exists(), str(plan_path)),
         _check("context_packet_exists", context_path.exists(), str(context_path)),
+        _check("source_map_exists", source_map_path.exists(), str(source_map_path)),
         _check("tool_contracts_exist", tools_path.exists(), str(tools_path)),
         _check("trace_exists", trace_path.exists(), str(trace_path)),
         _check(

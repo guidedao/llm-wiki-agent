@@ -70,7 +70,7 @@ CoreWeave или других компаний.
 
 Все команды ниже запускаются из корня репозитория `llm-wiki-agent`.
 
-## Preflight
+## Перед стартом
 
 Перед быстрым стартом проверьте две вещи:
 
@@ -111,7 +111,7 @@ uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault
 | --- | --- | --- | --- |
 | `uv sync --frozen --extra dev` | ставит зависимости через `uv` | один раз после клонирования | зависимости установлены без ошибок |
 | `uv run pytest` | запускает тесты проекта | перед сдачей и после правок | `passed` в выводе pytest |
-| `uv run kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault` | собирает локальный wiki-путь без API-ключа | чтобы увидеть артефакты запуска | появился `run_id`, ответ, сводка и отчёт проверки состояния |
+| `uv run kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault` | собирает локальный wiki-путь без API-ключа | чтобы увидеть артефакты запуска | появился `run_id`, ответ, сводка, source-map и отчёт проверки состояния |
 | `uv run kb-eval --eval-fixture fixtures/evals/cases.json --vault-root vault` | запускает маленький eval-набор | перед финальной сдачей | `status: pass`, `summary.passed_count == summary.case_count` |
 | `rm -rf artifacts vault/wiki vault/outputs vault/index.md vault/log.md` | сбрасывает только производные файлы | если нужно начать локальный прогон заново | остаётся только исходный `vault/raw/` |
 | `OPENAI_API_KEY=... uv run --extra openai kb-agent --query-fixture fixtures/queries/project_query.json --vault-root vault --live-openai` | делает финальный ответ через OpenAI Responses API | опционально, если есть ключ | появился `artifacts/responses/<run_id>.json` |
@@ -148,6 +148,7 @@ OpenAI Responses API. Модель получает только выбранн�
 - `artifacts/traces/<run_id>.jsonl`
 - `artifacts/plans/<run_id>.json`
 - `artifacts/context/<run_id>.json`
+- `artifacts/source-map/<run_id>.json`
 - `artifacts/tools/<run_id>.json`
 - `artifacts/health/<run_id>.json`
 - `artifacts/evals/<eval_run_id>.json` после eval-запуска
@@ -161,6 +162,8 @@ OpenAI Responses API. Модель получает только выбранн�
 - **Трейс** — журнал событий запуска в `artifacts/traces/`.
 - **Пакет контекста** — JSON, где видно, какие wiki- и raw-материалы попали в
   ответ.
+- **Source-map** — карта одного запуска: какой ответ, какой пакет контекста и
+  какие raw-источники поддерживают ответ.
 - **Запись запуска** — JSON с состоянием конкретного запуска.
 - **Отчёт проверки состояния** — проверка, что ключевые артефакты запуска на месте.
 - **Eval-отчёт** — маленькая retrieval/grounding smoke-проверка: нашёл ли
@@ -184,6 +187,7 @@ OpenAI Responses API. Модель получает только выбранн�
 - путь ответа `index → concepts → sources → raw`;
 - план ответа перед финальной генерацией;
 - пакет контекста и лестницу решений;
+- source-map: маленькую карту `answer -> context -> raw-источники`;
 - реестр контрактов тулов с разделением режима чтения и записи;
 - запись запуска, JSONL-трейс и отчёт проверки состояния;
 - сводку запуска, которую удобно открыть первой;
@@ -224,6 +228,8 @@ Brave Search API и X API не нужны для базового маршрут
 
 - `vault/` — человекочитаемый слой знаний, ответы и сводки запусков.
 - `artifacts/` — доказательства конкретного запуска.
+- После запуска удобный порядок чтения такой: summary, answer, source-map,
+  context, trace и health.
 - `docs/projects/README.md` — короткая карта проектного маршрута без внутренних
   меток и скрытых стартовых точек.
 - `docs/final-project.md` — бриф, критерии приёмки и рубрика кэпстоун-проекта.

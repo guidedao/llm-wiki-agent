@@ -20,6 +20,7 @@ from kb_agent.retrieval.context_packet import (
     resolve_wiki_documents_with_reasons,
 )
 from kb_agent.runtime.run_state import persist_run_record
+from kb_agent.runtime.source_map import build_source_map, persist_source_map
 from kb_agent.runtime.tracing import append_trace
 from kb_agent.retrieval.search import rank_documents, search_documents
 from kb_agent.storage.fixtures import load_markdown_corpus, load_query_fixture
@@ -163,9 +164,25 @@ def test_wiki_pages_drive_context_selection(tmp_path):
         raw_documents=resolved_raw,
         decision_ladder=decision_ladder,
     )
+    answer_path = tmp_path / "vault" / "outputs" / "run-1.md"
+    answer_path.parent.mkdir(parents=True, exist_ok=True)
+    answer_path.write_text("# Ответ\n", encoding="utf-8")
+    source_map_path = persist_source_map(
+        tmp_path / "artifacts",
+        build_source_map(
+            run_id="run-1",
+            question="Зачем Lumen Labs нужен буфер capacity?",
+            answer_path=answer_path,
+            context_path=context_path,
+            wiki_documents=concept_hits + source_hits,
+            raw_documents=resolved_raw,
+            decision_ladder=decision_ladder,
+        ),
+    )
 
     context_text = context_path.read_text(encoding="utf-8")
     plan_payload = json.loads(plan_path.read_text(encoding="utf-8"))
+    source_map_payload = json.loads(source_map_path.read_text(encoding="utf-8"))
     assert any(document["note_id"] == "index" for document in concept_hits)
     assert any(document["note_id"] == "concepts/gpu-capacity-planning" for document in concept_hits)
     assert any(document["note_id"] == "sources/capacity-planning-q2" for document in source_hits)
@@ -175,6 +192,13 @@ def test_wiki_pages_drive_context_selection(tmp_path):
     assert "matched_terms" in context_text
     assert len(plan_payload["steps"]) >= 3
     assert plan_payload["steps"][-1]["target_layer"] == "raw"
+    assert source_map_payload["scope"] == "run_scoped"
+    assert source_map_payload["context_path"] == context_path.as_posix()
+    assert any(
+        item["raw_source"]["source_id"] == "capacity-planning-q2"
+        and item["status"] == "supported"
+        for item in source_map_payload["evidence"]
+    )
 
 
 def test_vault_home_and_log_are_written(tmp_path):
@@ -232,6 +256,7 @@ def test_run_summary_points_to_answer_and_runtime_artifacts(tmp_path):
         artifact_paths={
             "plan": tmp_path / "artifacts" / "plans" / "run-1.json",
             "context": tmp_path / "artifacts" / "context" / "run-1.json",
+            "source-map": tmp_path / "artifacts" / "source-map" / "run-1.json",
             "tools": tmp_path / "artifacts" / "tools" / "run-1.json",
             "trace": tmp_path / "artifacts" / "traces" / "run-1.jsonl",
             "health": tmp_path / "artifacts" / "health" / "run-1.json",
@@ -242,6 +267,7 @@ def test_run_summary_points_to_answer_and_runtime_artifacts(tmp_path):
     text = summary_path.read_text(encoding="utf-8")
     assert "[[outputs/run-1]]" in text
     assert "[[raw/company-brief]]" in text
+    assert "`source-map`:" in text
     assert "`tools`:" in text
     assert "Модель не получает права менять" in text
 
@@ -263,6 +289,7 @@ def test_health_report_checks_core_run_artifacts(tmp_path):
         "plan_created",
         "plan_context_selected",
         "context_packet_written",
+        "source_map_written",
         "answer_written",
         "run_summary_written",
         "plan_completed",
@@ -276,6 +303,11 @@ def test_health_report_checks_core_run_artifacts(tmp_path):
     (artifacts_dir / "context").mkdir(parents=True)
     (artifacts_dir / "context" / f"{run_id}.json").write_text(
         json.dumps({"decision_ladder": []}) + "\n",
+        encoding="utf-8",
+    )
+    (artifacts_dir / "source-map").mkdir(parents=True)
+    (artifacts_dir / "source-map" / f"{run_id}.json").write_text(
+        json.dumps({"run_id": run_id, "evidence": []}) + "\n",
         encoding="utf-8",
     )
     persist_tool_contracts(artifacts_dir, run_id=run_id)
@@ -341,6 +373,9 @@ def test_cli_live_openai_path_is_e2e_testable_without_api_key(tmp_path, monkeypa
     health_report = json.loads(
         (artifacts_dir / "health" / f"{run_id}.json").read_text(encoding="utf-8")
     )
+    source_map_payload = json.loads(
+        (artifacts_dir / "source-map" / f"{run_id}.json").read_text(encoding="utf-8")
+    )
     answer_text = (vault_root / "outputs" / f"{run_id}.md").read_text(encoding="utf-8")
     summary_text = (
         vault_root / "outputs" / f"{run_id}-summary.md"
@@ -349,7 +384,13 @@ def test_cli_live_openai_path_is_e2e_testable_without_api_key(tmp_path, monkeypa
     assert run_record["answer_source"] == "openai_responses"
     assert run_record["openai_response_metadata_path"] == str(response_paths[0])
     assert run_record["summary_path"].endswith(f"{run_id}-summary.md")
+    assert source_map_payload["run_id"] == run_id
+    assert source_map_payload["evidence"]
     assert health_report["status"] == "pass"
+    assert any(
+        check["name"] == "source_map_exists" and check["status"] == "pass"
+        for check in health_report["checks"]
+    )
     assert any(
         check["name"] == "openai_response_metadata_exists"
         and check["status"] == "pass"
@@ -357,6 +398,7 @@ def test_cli_live_openai_path_is_e2e_testable_without_api_key(tmp_path, monkeypa
     )
     assert "Live-путь прошёл" in answer_text
     assert "openai_responses" in summary_text
+    assert "source-map" in summary_text
     assert "openai_response" in summary_text
 
 
